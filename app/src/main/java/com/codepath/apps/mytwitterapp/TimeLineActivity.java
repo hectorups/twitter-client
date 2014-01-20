@@ -1,7 +1,10 @@
 package com.codepath.apps.mytwitterapp;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -16,7 +19,7 @@ import org.json.JSONArray;
 import java.util.ArrayList;
 
 public class TimeLineActivity extends Activity {
-
+    private static final int TWEETS_PER_LOAD = 25;
     private ListView lvTweets;
     private TweetsAdapter tweetsAdapter;
 
@@ -29,19 +32,7 @@ public class TimeLineActivity extends Activity {
         tweetsAdapter = new TweetsAdapter(this, new ArrayList<Tweet>());
         lvTweets.setAdapter(tweetsAdapter);
 
-        MyTwitterApp.getRestClient().getHomeTimeline(new JsonHttpResponseHandler(){
-            @Override
-            public void onSuccess(JSONArray jsonTweets) {
-                Log.d("DEBUG", jsonTweets.toString());
-                ArrayList<Tweet> tweets = Tweet.fromJson(jsonTweets);
-
-                for(Tweet t: tweets){
-                    tweetsAdapter.add(t);
-                }
-
-                tweetsAdapter.notifyDataSetChanged();
-            }
-        });
+        loadTweets();
 
     }
 
@@ -63,6 +54,48 @@ public class TimeLineActivity extends Activity {
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
+
+    private void loadTweets(){
+        if( isOnline() ){
+            loadTweetsFromApi();
+        } else {
+            loadTweetsFromDb();
+        }
+    }
+
+    private void loadTweetsFromDb(){
+        updateAdaptor(Tweet.recentTweets(TWEETS_PER_LOAD));
+    }
+
+    private void loadTweetsFromApi(){
+        MyTwitterApp.getRestClient().getHomeTimeline(TWEETS_PER_LOAD, new JsonHttpResponseHandler(){
+            @Override
+            public void onSuccess(JSONArray jsonTweets) {
+                Log.d("DEBUG", jsonTweets.toString());
+                ArrayList<Tweet> tweets = Tweet.fromJson(jsonTweets);
+                updateAdaptor(tweets);
+            }
+        });
+    }
+
+    public void updateAdaptor(ArrayList<Tweet> tweets){
+        for(Tweet t: tweets){
+            tweetsAdapter.add(t);
+        }
+
+        tweetsAdapter.notifyDataSetChanged();
+    }
+
+    private boolean isOnline() {
+
+        ConnectivityManager cm =
+                (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo netInfo = cm.getActiveNetworkInfo();
+        if (netInfo != null && netInfo.isConnectedOrConnecting()) {
+            return true;
+        }
+        return false;
     }
 
 

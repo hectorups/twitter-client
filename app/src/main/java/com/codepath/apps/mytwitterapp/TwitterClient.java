@@ -22,7 +22,7 @@ import org.scribe.builder.api.TwitterApi;
  * 
  */
 public class TwitterClient extends OAuthBaseClient {
-    private static final int TWEETS_PER_LOAD = 25;
+
     public static final Class<? extends Api> REST_API_CLASS = TwitterApi.class; // Change this
     public static final String REST_URL = "https://api.twitter.com/1.1";
     public static final String REST_CONSUMER_KEY = "Fu4VLwZovZzgfnTgoGlqw";
@@ -33,10 +33,10 @@ public class TwitterClient extends OAuthBaseClient {
         super(context, REST_API_CLASS, REST_URL, REST_CONSUMER_KEY, REST_CONSUMER_SECRET, REST_CALLBACK_URL);
     }
 
-    public void getHomeTimeline(AsyncHttpResponseHandler handler){
+    public void getHomeTimeline(int limit, AsyncHttpResponseHandler handler){
         String url = getApiUrl("statuses/home_timeline.json");
         RequestParams params = new RequestParams();
-        params.put("count", String.valueOf(TWEETS_PER_LOAD));
+        params.put("count", String.valueOf(limit));
         client.get(url, params, handler);
     }
 

@@ -31,18 +31,16 @@ public class TweetsAdapter extends ArrayAdapter<Tweet>{
 
         Tweet t = getItem(position);
 
+        // Author Avatar
+        ImageView ivAuthorAvatar = (ImageView)tweetView.findViewById(R.id.ivProfile);
+        ImageLoader.getInstance().displayImage(t.getUser().getProfileImageUrl(), ivAuthorAvatar);
+
         // Author name
         TextView tvAuthorName = (TextView)tweetView.findViewById(R.id.tvName);
         String authorName = t.getUser().getName();
         tvAuthorName.setText(Html.fromHtml(authorName));
 
-
-        // Author Avatar
-        ImageView ivAuthorAvatar = (ImageView)tweetView.findViewById(R.id.ivProfile);
-        ImageLoader.getInstance().displayImage(t.getUser().getProfileImageUrl(), ivAuthorAvatar);
-
         ivAuthorAvatar.setTag(authorName);
-
 
         // Tweet Text
         TextView tvTextView = (TextView)tweetView.findViewById(R.id.tvBody);
