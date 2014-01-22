@@ -2,17 +2,23 @@ package com.codepath.apps.mytwitterapp;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.loopj.android.http.AsyncHttpResponseHandler;
 
 public class ActivityComposeTweet extends Activity {
 
+    private final int CHARACTER_LIMIT = 160;
+
     private EditText etTweetContents;
+    private TextView tvCharacterCount;
     private Button btnClear;
     private Button btnSend;
     private Button btnCancel;
@@ -23,6 +29,7 @@ public class ActivityComposeTweet extends Activity {
         setContentView(R.layout.activity_compose_tweet);
 
         etTweetContents = (EditText) findViewById(R.id.etTweetContents);
+        tvCharacterCount = (TextView) findViewById(R.id.tvCharacterCount);
         btnClear = (Button) findViewById(R.id.btnClear);
         btnSend = (Button) findViewById(R.id.btnSend);
         btnCancel = (Button) findViewById(R.id.btnCancel);
@@ -52,6 +59,8 @@ public class ActivityComposeTweet extends Activity {
             }
         });
 
+        etTweetContents.addTextChangedListener(mTextEditorWatcher);
+
     }
 
     private void sendTweet(String text){
@@ -76,6 +85,20 @@ public class ActivityComposeTweet extends Activity {
             }
         });
     }
+
+    private final TextWatcher mTextEditorWatcher = new TextWatcher() {
+
+        public void beforeTextChanged(CharSequence s, int start, int count, int after){
+            tvCharacterCount.setText(getString(R.string.characters_left, 0));
+        }
+
+        public void onTextChanged(CharSequence s, int start, int before, int count){}
+
+        public void afterTextChanged(Editable s)
+        {
+            tvCharacterCount.setText(getString(R.string.characters_left, CHARACTER_LIMIT - s.length()));
+        }
+    };
 
 
 

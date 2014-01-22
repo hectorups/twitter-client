@@ -71,4 +71,12 @@
         android:layout_alignTop="@+id/tvComposeTweetTitle"
         android:textAppearance="?android:attr/textAppearanceMedium" />
 
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/tvCharacterCount"
+        android:layout_centerVertical="true"
+        android:layout_alignLeft="@+id/btnCancel"
+        android:layout_alignStart="@+id/btnCancel" />
+
 </RelativeLayout>
