@@ -12,23 +12,24 @@
         android:id="@+id/tvComposeTweetTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
+        android:layout_marginTop="38dp"
+        android:textAppearance="?android:attr/textAppearanceMedium"
         android:layout_alignParentTop="true"
-        android:layout_marginTop="37dp"
-        android:text="@string/compose_tweet"
-        android:textAppearance="?android:attr/textAppearanceMedium" />
+        android:layout_toLeftOf="@+id/btnSend"
+        android:layout_alignLeft="@+id/btnCancel"
+        android:layout_alignStart="@+id/btnCancel" />
 
     <EditText
         android:id="@+id/etTweetContents"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignLeft="@+id/tvComposeTweetTitle"
-        android:layout_alignParentRight="true"
         android:layout_below="@+id/tvComposeTweetTitle"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="10dp"
         android:ems="10"
         android:maxLength="140"
-        android:inputType="textMultiLine" >
+        android:inputType="textMultiLine"
+        >
 
         <requestFocus />
     </EditText>
@@ -41,6 +42,7 @@
         android:layout_centerHorizontal="true"
         android:layout_marginTop="17dp"
         android:text="@string/clear_compose_tweet"
+        style="@style/MT.SmallButton.Grey"
      />
 
     <Button
@@ -51,6 +53,7 @@
         android:layout_alignBottom="@+id/btnCancel"
         android:layout_toRightOf="@+id/btnClear"
         android:text="@string/send_tweet"
+        style="@style/MT.SmallButton"
          />
 
     <Button
@@ -61,22 +64,32 @@
         android:layout_alignBottom="@+id/btnClear"
         android:layout_toLeftOf="@+id/btnClear"
         android:text="@string/cancel_compose_tweet"
+        style="@style/MT.SmallButton.Grey"
      />
 
     <TextView
         android:id="@+id/tvCounter"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignRight="@+id/etTweetContents"
-        android:layout_alignTop="@+id/tvComposeTweetTitle"
-        android:textAppearance="?android:attr/textAppearanceMedium" />
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:layout_below="@+id/btnCancel"
+        android:layout_alignLeft="@+id/btnCancel"
+        android:layout_alignStart="@+id/btnCancel"
+        android:layout_marginTop="22dp" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/tvCharacterCount"
-        android:layout_centerVertical="true"
-        android:layout_alignLeft="@+id/btnCancel"
-        android:layout_alignStart="@+id/btnCancel" />
+        android:layout_alignBottom="@+id/tvCounter"
+        android:layout_toRightOf="@+id/tvCounter" />
+
+    <ImageView
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:id="@+id/ivThumb"
+        android:layout_alignTop="@+id/tvComposeTweetTitle"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
 
 </RelativeLayout>

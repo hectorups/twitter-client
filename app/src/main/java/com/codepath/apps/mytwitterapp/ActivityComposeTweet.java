@@ -8,20 +8,29 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.codepath.apps.mytwitterapp.models.User;
 import com.loopj.android.http.AsyncHttpResponseHandler;
+import com.loopj.android.http.JsonHttpResponseHandler;
+import com.nostra13.universalimageloader.core.ImageLoader;
+
+import org.json.JSONObject;
 
 public class ActivityComposeTweet extends Activity {
+    private final String TAG = "ancitivitycomposetweet";
 
     private final int CHARACTER_LIMIT = 160;
 
     private EditText etTweetContents;
     private TextView tvCharacterCount;
+    private TextView tvComposeTweetTitle;
     private Button btnClear;
     private Button btnSend;
     private Button btnCancel;
+    private ImageView ivThumb;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,9 +39,14 @@ public class ActivityComposeTweet extends Activity {
 
         etTweetContents = (EditText) findViewById(R.id.etTweetContents);
         tvCharacterCount = (TextView) findViewById(R.id.tvCharacterCount);
+        tvComposeTweetTitle = (TextView) findViewById(R.id.tvComposeTweetTitle);
         btnClear = (Button) findViewById(R.id.btnClear);
         btnSend = (Button) findViewById(R.id.btnSend);
         btnCancel = (Button) findViewById(R.id.btnCancel);
+        ivThumb = (ImageView) findViewById(R.id.ivThumb);
+
+        setTitle(getResources().getString(R.string.compose_tweet));
+
 
         btnCancel.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -61,6 +75,24 @@ public class ActivityComposeTweet extends Activity {
 
         etTweetContents.addTextChangedListener(mTextEditorWatcher);
 
+        loadThumb();
+
+    }
+
+    public void loadThumb() {
+        MyTwitterApp.getRestClient().getMyInfo( new JsonHttpResponseHandler() {
+            @Override
+            public void onSuccess(JSONObject json) {
+                User u = User.fromJson(json);
+                ImageLoader.getInstance().displayImage(u.getProfileImageUrl(), ivThumb);
+                tvComposeTweetTitle.setText("@" + u.getScreenName());
+            }
+
+            @Override
+            public void onFailure(Throwable e, JSONObject error) {
+                Log.e(TAG, e.toString());
+            }
+        });
     }
 
     private void sendTweet(String text){
