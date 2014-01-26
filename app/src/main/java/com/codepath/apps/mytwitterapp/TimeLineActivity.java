@@ -83,6 +83,11 @@ public class TimeLineActivity extends ActionBarActivity {
                 Intent intent = new Intent(getApplicationContext(), ActivityComposeTweet.class);
                 startActivity(intent);
                 return true;
+            case R.id.action_logout:
+                MyTwitterApp.getRestClient().clearAccessToken();
+                Intent i = new Intent(getApplicationContext(), LoginActivity.class);
+                startActivity(i);
+                return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
@@ -97,6 +102,7 @@ public class TimeLineActivity extends ActionBarActivity {
     }
 
     private void loadTweetsFromDb(){
+        tweetsAdapter.clear();
         updateAdaptor(Tweet.recentTweets(TWEETS_PER_LOAD));
     }
 
@@ -104,6 +110,7 @@ public class TimeLineActivity extends ActionBarActivity {
         MyTwitterApp.getRestClient().getHomeTimeline(TWEETS_PER_LOAD, new JsonHttpResponseHandler() {
             @Override
             public void onSuccess(JSONArray jsonTweets) {
+                tweetsAdapter.clear();
                 Log.d("DEBUG", jsonTweets.toString());
                 ArrayList<Tweet> tweets = Tweet.fromJson(jsonTweets);
                 updateAdaptor(tweets);
@@ -139,7 +146,6 @@ public class TimeLineActivity extends ActionBarActivity {
     private OnRefreshListener onRefreshListener = new OnRefreshListener() {
         @Override
         public void onRefreshStarted(View view) {
-            tweetsAdapter.clear();
             loadTweets();
         }
     };
