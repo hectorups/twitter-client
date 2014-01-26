@@ -67,7 +67,10 @@ public class TimeLineActivity extends Activity {
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle presses on the action bar items
         switch (item.getItemId()) {
-            case R.id.action_add_tweet:
+            case R.id.action_refresh:
+                loadTweets();
+                return true;
+            case R.id.action_compose_tweet:
                 Intent intent = new Intent(getApplicationContext(), ActivityComposeTweet.class);
                 startActivity(intent);
                 return true;

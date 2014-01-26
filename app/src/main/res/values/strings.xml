@@ -17,5 +17,6 @@
     <string name="tweet_posted">Tweet Posted</string>
     <string name="tweet_failed">Tweet Failed</string>
     <string name="characters_left">Caracters left: %1$d</string>
+    <string name="refresh">Refresh</string>
 
 </resources>
