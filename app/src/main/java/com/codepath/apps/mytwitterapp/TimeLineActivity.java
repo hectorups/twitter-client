@@ -30,7 +30,7 @@ public class TimeLineActivity extends ActionBarActivity {
     private static final int TWEETS_PER_LOAD = 25;
     private ListView lvTweets;
     private TweetsAdapter tweetsAdapter;
-    private PullToRefreshLayout mPullToRefreshLayout;
+    private PullToRefreshLayout pullToRefreshLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,13 +42,13 @@ public class TimeLineActivity extends ActionBarActivity {
         tweetsAdapter = new TweetsAdapter(this, new ArrayList<Tweet>());
         lvTweets.setAdapter(tweetsAdapter);
 
-        mPullToRefreshLayout = (PullToRefreshLayout) findViewById(R.id.ptr_layout);
+        pullToRefreshLayout = (PullToRefreshLayout) findViewById(R.id.ptr_layout);
         ActionBarPullToRefresh.from(this)
                 .allChildrenArePullable()
                 .listener(onRefreshListener)
-                .setup(mPullToRefreshLayout);
+                .setup(pullToRefreshLayout);
 
-        //loadProfileInfo();
+        loadProfileInfo();
         loadTweets();
 
     }
@@ -98,23 +98,20 @@ public class TimeLineActivity extends ActionBarActivity {
 
     private void loadTweetsFromDb(){
         updateAdaptor(Tweet.recentTweets(TWEETS_PER_LOAD));
-        mPullToRefreshLayout.setRefreshComplete();
     }
 
     private void loadTweetsFromApi(){
-        MyTwitterApp.getRestClient().getHomeTimeline(TWEETS_PER_LOAD, new JsonHttpResponseHandler(){
+        MyTwitterApp.getRestClient().getHomeTimeline(TWEETS_PER_LOAD, new JsonHttpResponseHandler() {
             @Override
             public void onSuccess(JSONArray jsonTweets) {
                 Log.d("DEBUG", jsonTweets.toString());
                 ArrayList<Tweet> tweets = Tweet.fromJson(jsonTweets);
                 updateAdaptor(tweets);
-                mPullToRefreshLayout.setRefreshComplete();
             }
 
             @Override
             public void onFailure(Throwable e, JSONObject error) {
                 Log.e(TAG, e.toString());
-                mPullToRefreshLayout.setRefreshComplete();
             }
         });
     }
@@ -125,6 +122,7 @@ public class TimeLineActivity extends ActionBarActivity {
         }
 
         tweetsAdapter.notifyDataSetChanged();
+        pullToRefreshLayout.setRefreshComplete();
     }
 
     private boolean isOnline() {
@@ -141,6 +139,7 @@ public class TimeLineActivity extends ActionBarActivity {
     private OnRefreshListener onRefreshListener = new OnRefreshListener() {
         @Override
         public void onRefreshStarted(View view) {
+            tweetsAdapter.clear();
             loadTweets();
         }
     };
