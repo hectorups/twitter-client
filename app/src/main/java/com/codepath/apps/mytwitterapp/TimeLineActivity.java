@@ -70,7 +70,7 @@ public class TimeLineActivity extends Activity {
             case R.id.action_refresh:
                 loadTweets();
                 return true;
-            case R.id.action_compose_tweet:
+            case R.id.action_write_tweet:
                 Intent intent = new Intent(getApplicationContext(), ActivityComposeTweet.class);
                 startActivity(intent);
                 return true;
