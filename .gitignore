@@ -3,6 +3,8 @@ pk
 /.idea/workspace.xml
 .DS_Store
 
+/.idea
+
 # files for the dex VM
 *.dex
 

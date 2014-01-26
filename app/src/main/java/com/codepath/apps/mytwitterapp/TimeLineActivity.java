@@ -12,13 +12,16 @@ import android.view.MenuItem;
 import android.widget.ListView;
 
 import com.codepath.apps.mytwitterapp.models.Tweet;
+import com.codepath.apps.mytwitterapp.models.User;
 import com.loopj.android.http.JsonHttpResponseHandler;
 
 import org.json.JSONArray;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 
 public class TimeLineActivity extends Activity {
+    private static final String TAG = "timelineactivity";
     private static final int TWEETS_PER_LOAD = 25;
     private ListView lvTweets;
     private TweetsAdapter tweetsAdapter;
@@ -29,11 +32,28 @@ public class TimeLineActivity extends Activity {
         setContentView(R.layout.activity_time_line);
 
         lvTweets = (ListView) findViewById(R.id.lvTweet);
+
         tweetsAdapter = new TweetsAdapter(this, new ArrayList<Tweet>());
         lvTweets.setAdapter(tweetsAdapter);
 
+        loadProfileInfo();
         loadTweets();
 
+    }
+
+    public void loadProfileInfo() {
+        MyTwitterApp.getRestClient().getMyInfo( new JsonHttpResponseHandler() {
+            @Override
+            public void onSuccess(JSONObject json) {
+                User u = User.fromJson(json);
+                setTitle("@" + u.getScreenName());
+            }
+            
+            @Override
+            public void onFailure(Throwable e, JSONObject error) {
+                Log.e(TAG, e.toString());
+            }
+        });
     }
 
     @Override
