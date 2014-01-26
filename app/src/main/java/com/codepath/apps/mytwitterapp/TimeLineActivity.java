@@ -1,14 +1,15 @@
 package com.codepath.apps.mytwitterapp;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
+import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.ListView;
 
 import com.codepath.apps.mytwitterapp.models.Tweet;
@@ -20,11 +21,16 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
-public class TimeLineActivity extends Activity {
+import uk.co.senab.actionbarpulltorefresh.extras.actionbarcompat.PullToRefreshLayout;
+import uk.co.senab.actionbarpulltorefresh.library.ActionBarPullToRefresh;
+import uk.co.senab.actionbarpulltorefresh.library.listeners.OnRefreshListener;
+
+public class TimeLineActivity extends ActionBarActivity {
     private static final String TAG = "timelineactivity";
     private static final int TWEETS_PER_LOAD = 25;
     private ListView lvTweets;
     private TweetsAdapter tweetsAdapter;
+    private PullToRefreshLayout mPullToRefreshLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,7 +42,13 @@ public class TimeLineActivity extends Activity {
         tweetsAdapter = new TweetsAdapter(this, new ArrayList<Tweet>());
         lvTweets.setAdapter(tweetsAdapter);
 
-        loadProfileInfo();
+        mPullToRefreshLayout = (PullToRefreshLayout) findViewById(R.id.ptr_layout);
+        ActionBarPullToRefresh.from(this)
+                .allChildrenArePullable()
+                .listener(onRefreshListener)
+                .setup(mPullToRefreshLayout);
+
+        //loadProfileInfo();
         loadTweets();
 
     }
@@ -67,9 +79,6 @@ public class TimeLineActivity extends Activity {
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle presses on the action bar items
         switch (item.getItemId()) {
-            case R.id.action_refresh:
-                loadTweets();
-                return true;
             case R.id.action_write_tweet:
                 Intent intent = new Intent(getApplicationContext(), ActivityComposeTweet.class);
                 startActivity(intent);
@@ -89,6 +98,7 @@ public class TimeLineActivity extends Activity {
 
     private void loadTweetsFromDb(){
         updateAdaptor(Tweet.recentTweets(TWEETS_PER_LOAD));
+        mPullToRefreshLayout.setRefreshComplete();
     }
 
     private void loadTweetsFromApi(){
@@ -98,6 +108,13 @@ public class TimeLineActivity extends Activity {
                 Log.d("DEBUG", jsonTweets.toString());
                 ArrayList<Tweet> tweets = Tweet.fromJson(jsonTweets);
                 updateAdaptor(tweets);
+                mPullToRefreshLayout.setRefreshComplete();
+            }
+
+            @Override
+            public void onFailure(Throwable e, JSONObject error) {
+                Log.e(TAG, e.toString());
+                mPullToRefreshLayout.setRefreshComplete();
             }
         });
     }
@@ -120,6 +137,13 @@ public class TimeLineActivity extends Activity {
         }
         return false;
     }
+
+    private OnRefreshListener onRefreshListener = new OnRefreshListener() {
+        @Override
+        public void onRefreshStarted(View view) {
+            loadTweets();
+        }
+    };
 
 
 }
