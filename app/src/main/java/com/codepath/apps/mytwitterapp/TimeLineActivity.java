@@ -2,16 +2,15 @@ package com.codepath.apps.mytwitterapp;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import com.codepath.apps.mytwitterapp.fragments.HomeTimelineFragment;
-import com.codepath.apps.mytwitterapp.fragments.MentionsFragment;
+import com.codepath.apps.mytwitterapp.fragments.CollectionPagerAdapter;
 import com.codepath.apps.mytwitterapp.models.User;
 import com.loopj.android.http.JsonHttpResponseHandler;
 
@@ -19,6 +18,9 @@ import org.json.JSONObject;
 
 public class TimeLineActivity extends ActionBarActivity implements ActionBar.TabListener {
     private static final String TAG = "timelineactivity";
+
+    CollectionPagerAdapter collectionPagerAdapter;
+    ViewPager viewPager;
 
 
 
@@ -73,9 +75,28 @@ public class TimeLineActivity extends ActionBarActivity implements ActionBar.Tab
     }
 
     private void setupNavigationTabs(){
+
+        collectionPagerAdapter =
+                new CollectionPagerAdapter(
+                        getSupportFragmentManager());
+        viewPager = (ViewPager) findViewById(R.id.pager);
+        viewPager.setAdapter(collectionPagerAdapter);
+
+        viewPager.setOnPageChangeListener(
+                new ViewPager.SimpleOnPageChangeListener() {
+                    @Override
+                    public void onPageSelected(int position) {
+                        // When swiping between pages, select the
+                        // corresponding tab.
+                        getActionBar().setSelectedNavigationItem(position);
+                    }
+                });
+
+
         ActionBar actionBar = getSupportActionBar();
         actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
         actionBar.setDisplayShowTitleEnabled(true);
+
         ActionBar.Tab tabHome = actionBar.newTab()
                 .setText("Home")
                 .setTag("HomeTimeLineFragment")
@@ -96,14 +117,7 @@ public class TimeLineActivity extends ActionBarActivity implements ActionBar.Tab
 
     @Override
     public void onTabSelected(ActionBar.Tab tab, FragmentTransaction fragmentTransaction) {
-        FragmentManager manager = getSupportFragmentManager();
-        android.support.v4.app.FragmentTransaction fts = manager.beginTransaction();
-        if(tab.getTag() == "HomeTimeLineFragment"){
-            fts.replace(R.id.frameContainer, new HomeTimelineFragment());
-        } else {
-            fts.replace(R.id.frameContainer, new MentionsFragment());
-        }
-        fts.commit();
+        viewPager.setCurrentItem(tab.getPosition());
     }
 
     @Override
