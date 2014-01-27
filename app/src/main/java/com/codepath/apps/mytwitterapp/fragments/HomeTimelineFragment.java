@@ -36,6 +36,7 @@ public class HomeTimelineFragment extends TweetsListFragments {
     private void loadTweetsFromDb(){
         tweetsAdapter.clear();
         updateAdaptor(Tweet.recentTweets(TWEETS_PER_LOAD));
+        pullToRefreshLayout.setRefreshComplete();
     }
 
     private void loadTweetsFromApi(){
@@ -43,15 +44,22 @@ public class HomeTimelineFragment extends TweetsListFragments {
             @Override
             public void onSuccess(JSONArray jsonTweets) {
                 tweetsAdapter.clear();
+                pullToRefreshLayout.setRefreshComplete();
                 Log.d(TAG, jsonTweets.toString());
                 ArrayList<Tweet> tweets = Tweet.fromJson(jsonTweets);
                 updateAdaptor(tweets);
+
             }
 
             @Override
             public void onFailure(Throwable e, JSONObject error) {
                 Log.e(TAG, e.toString());
+                pullToRefreshLayout.setRefreshComplete();
             }
         });
+    }
+
+    public void refresh(){
+        loadTweets();
     }
 }

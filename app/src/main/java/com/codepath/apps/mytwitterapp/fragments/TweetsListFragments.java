@@ -16,14 +16,20 @@ import com.codepath.apps.mytwitterapp.models.Tweet;
 
 import java.util.ArrayList;
 
+import uk.co.senab.actionbarpulltorefresh.extras.actionbarcompat.PullToRefreshLayout;
+import uk.co.senab.actionbarpulltorefresh.library.ActionBarPullToRefresh;
+import uk.co.senab.actionbarpulltorefresh.library.listeners.OnRefreshListener;
+
 /**
  * Created by hectormonserrate on 26/01/14.
  */
-public class TweetsListFragments extends Fragment {
+public abstract class TweetsListFragments extends Fragment implements OnRefreshListener {
     protected String TAG = "TweetsListFragments";
     protected static int TWEETS_PER_LOAD = 25;
     private ListView lvTweets;
     protected TweetsAdapter tweetsAdapter;
+
+    protected PullToRefreshLayout pullToRefreshLayout;
 
 
     @Override
@@ -35,6 +41,12 @@ public class TweetsListFragments extends Fragment {
         tweetsAdapter = new TweetsAdapter(getActivity(), new ArrayList<Tweet>());
         lvTweets.setAdapter(tweetsAdapter);
 
+
+        pullToRefreshLayout = (PullToRefreshLayout) v.findViewById(R.id.ptr_layout);
+        ActionBarPullToRefresh.from(getActivity())
+                .allChildrenArePullable()
+                .listener(this)
+                .setup(pullToRefreshLayout);
 
 
         return v;
@@ -61,6 +73,13 @@ public class TweetsListFragments extends Fragment {
         }
         return false;
     }
+
+    @Override
+    public void onRefreshStarted(View view) {
+        refresh();
+    }
+
+    public abstract void refresh();
 
 
 }
