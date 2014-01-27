@@ -15,6 +15,8 @@ import org.json.JSONObject;
 public class TimeLineActivity extends ActionBarActivity {
     private static final String TAG = "timelineactivity";
 
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -33,7 +35,7 @@ public class TimeLineActivity extends ActionBarActivity {
             }
             
             @Override
-            public void onFailure(Throwable e, JSONObject error) {
+            public void onFailure(Throwable  e, JSONObject error) {
                 Log.e(TAG, e.toString());
             }
         });
