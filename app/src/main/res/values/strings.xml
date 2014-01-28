@@ -19,6 +19,6 @@
     <string name="characters_left">Caracters left: %1$d</string>
     <string name="refresh">Refresh</string>
     <string name="logout">Log out</string>
-
+    <string name="title_activity_profile">ProfileActivity</string>
 
 </resources>

@@ -59,14 +59,19 @@ public class TimeLineActivity extends ActionBarActivity implements ActionBar.Tab
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle presses on the action bar items
+        Intent i = null;
         switch (item.getItemId()) {
+            case R.id.action_profile:
+                i = new Intent(this, ProfileActivity.class);
+                startActivity(i);
+                return true;
             case R.id.action_write_tweet:
-                Intent intent = new Intent(getApplicationContext(), ActivityComposeTweet.class);
-                startActivity(intent);
+                i = new Intent(getApplicationContext(), ActivityComposeTweet.class);
+                startActivity(i);
                 return true;
             case R.id.action_logout:
                 MyTwitterApp.getRestClient().clearAccessToken();
-                Intent i = new Intent(getApplicationContext(), LoginActivity.class);
+                i = new Intent(getApplicationContext(), LoginActivity.class);
                 startActivity(i);
                 return true;
             default:
