@@ -2,6 +2,7 @@ package com.codepath.apps.mytwitterapp;
 
 import android.content.Context;
 import android.text.Html;
+import android.text.format.DateUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -37,14 +38,31 @@ public class TweetsAdapter extends ArrayAdapter<Tweet>{
 
         // Author name
         TextView tvAuthorName = (TextView)tweetView.findViewById(R.id.tvName);
-        String authorName = t.getUser().getName();
+        String authorName = t.getUser().getName().trim();
         tvAuthorName.setText(Html.fromHtml(authorName));
 
         ivAuthorAvatar.setTag(authorName);
 
+        // Author ScreenName
+        TextView tvAuthorScreenName = (TextView)tweetView.findViewById(R.id.tvScreenName);
+        String screenName = t.getUser().getScreenName().trim();
+        tvAuthorScreenName.setText("@" + screenName);
+
         // Tweet Text
         TextView tvTextView = (TextView)tweetView.findViewById(R.id.tvBody);
-        tvTextView.setText(Html.fromHtml(t.getBody()));
+        tvTextView.setText(t.getBody());
+
+        // Time
+        TextView tvCreatedAt = (TextView)tweetView.findViewById(R.id.tvCreatedAt);
+        String relativeDate = (String) DateUtils.getRelativeDateTimeString(
+                getContext(),
+                t.getCreatedAt().getTime(),
+                DateUtils.MINUTE_IN_MILLIS,
+                DateUtils.WEEK_IN_MILLIS,
+                0);
+        String[] parts = relativeDate.split(",");
+        tvCreatedAt.setText(parts[0].trim());
+
 
 
         return tweetView;
