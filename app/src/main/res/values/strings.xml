@@ -16,9 +16,11 @@
     <string name="add_tweet">Add Tweet</string>
     <string name="tweet_posted">Tweet Posted</string>
     <string name="tweet_failed">Tweet Failed</string>
-    <string name="characters_left">Caracters left: %1$d</string>
+    <string name="characters_left">Characters left: %1$d</string>
     <string name="refresh">Refresh</string>
     <string name="logout">Log out</string>
+    <string name="tweet_prompt">What is happening ?</string>
     <string name="title_activity_profile">ProfileActivity</string>
+
 
 </resources>

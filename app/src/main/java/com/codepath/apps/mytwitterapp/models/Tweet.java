@@ -1,5 +1,8 @@
 package com.codepath.apps.mytwitterapp.models;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import com.activeandroid.Model;
 import com.activeandroid.annotation.Column;
 import com.activeandroid.annotation.Table;
@@ -9,14 +12,17 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
  * Created by hectormonserrate on 18/01/14.
  */
 @Table(name = "tweets")
-public class Tweet extends Model {
+public class Tweet extends Model implements Parcelable {
 
     @Column(name = "body")
     private String body;
@@ -24,12 +30,12 @@ public class Tweet extends Model {
     @Column(name = "tweet_id")
     private Long tweetId;
 
-    @Column(name = "is_favored")
-    private boolean isFavored;
 
     @Column(name = "User")
     private User user;
 
+    @Column(name = "created_at", index = true)
+    private Date createdAt;
 
     public User getUser(){
         return user;
@@ -39,11 +45,10 @@ public class Tweet extends Model {
         return body;
     }
 
-    public boolean IsFavored(){
-        return isFavored;
-    }
 
-    public Long tweetId(){
+    public Date getCreatedAt(){ return createdAt; }
+
+    public Long getTweetId(){
         return tweetId;
     }
 
@@ -58,7 +63,7 @@ public class Tweet extends Model {
             t.user = User.fromJson(jsonObject.getJSONObject("user"));
             t.body = jsonObject.getString("text");
             t.tweetId = tweetId;
-            t.isFavored = jsonObject.getBoolean("is_favored");
+            t.setDateFromString(jsonObject.getString("created_at"));
         } catch (JSONException e){
             e.printStackTrace();
         }
@@ -103,4 +108,50 @@ public class Tweet extends Model {
                 .where("tweet_id = ?", tweetId)
                 .executeSingle();
     }
+
+    private void setDateFromString(String date) {
+        SimpleDateFormat sf = new SimpleDateFormat("EEE MMM dd HH:mm:ss ZZZZZ yyyy");
+        sf.setLenient(true);
+        try{
+            this.createdAt = sf.parse(date);
+        } catch (ParseException e) { e.printStackTrace(); }
+    }
+
+    /*
+     *  Parcelable Overrides
+     */
+
+    protected Tweet(Parcel in) {
+        body = in.readString();
+        tweetId = in.readLong();
+        user = in.readParcelable(User.class.getClassLoader());
+        createdAt = new Date(in.readLong());
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(body);
+        dest.writeLong(tweetId);
+        dest.writeParcelable(user, flags);
+        dest.writeLong(createdAt.getTime());
+    }
+
+    @SuppressWarnings("unused")
+    public static final Parcelable.Creator<Tweet> CREATOR = new Parcelable.Creator<Tweet>() {
+        @Override
+        public Tweet createFromParcel(Parcel in) {
+            return new Tweet(in);
+        }
+
+        @Override
+        public Tweet[] newArray(int size) {
+            return new Tweet[size];
+        }
+    };
+
 }

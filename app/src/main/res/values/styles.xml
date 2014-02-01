@@ -22,12 +22,18 @@
         <item name="android:paddingLeft">10dp</item>
         <item name="android:paddingRight">10dp</item>
         <item name="android:gravity">center</item>
+        <item name="android:textColor">#FFFFFF</item>
         <item name="android:background">@drawable/btn_small_blue</item>
     </style>
 
-    <style name="MT.SmallButton.Grey">
+    <style name="MT.SmallButton.Grey" parent="style/MT.SmallButton">
         <item name="android:textColor">#FF747474</item>
         <item name="android:background">@drawable/btn_small_grey</item>
     </style>
-    
+
+    <style name="MT.GrayText">
+        <item name="android:textColor">#FF747474</item>
+        <item name="android:textSize">13dp</item>
+    </style>
+
 </resources>

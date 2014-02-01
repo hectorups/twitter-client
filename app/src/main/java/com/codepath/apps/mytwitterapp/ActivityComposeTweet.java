@@ -1,6 +1,7 @@
 package com.codepath.apps.mytwitterapp;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -12,17 +13,19 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.codepath.apps.mytwitterapp.models.Tweet;
 import com.codepath.apps.mytwitterapp.models.User;
-import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
 import org.json.JSONObject;
 
 public class ActivityComposeTweet extends Activity {
-    private final String TAG = "ancitivitycomposetweet";
+    private static final String TAG = "ancitivitycomposetweet";
+    public static final String CREATED_TWEET = "com.codepath.apps.mytwitterapp.activitycomposetweet.created_tweet";
 
-    private final int CHARACTER_LIMIT = 160;
+    private final int CHARACTER_LIMIT = 140;
+    private final String TWEET = "tweet";
 
     private EditText etTweetContents;
     private TextView tvCharacterCount;
@@ -38,7 +41,7 @@ public class ActivityComposeTweet extends Activity {
         setContentView(R.layout.activity_compose_tweet);
 
         etTweetContents = (EditText) findViewById(R.id.etTweetContents);
-        tvCharacterCount = (TextView) findViewById(R.id.tvCharacterCount);
+        tvCharacterCount = (TextView) findViewById(R.id.tvCounter);
         tvComposeTweetTitle = (TextView) findViewById(R.id.tvComposeTweetTitle);
         btnClear = (Button) findViewById(R.id.btnClear);
         btnSend = (Button) findViewById(R.id.btnSend);
@@ -75,6 +78,8 @@ public class ActivityComposeTweet extends Activity {
 
         etTweetContents.addTextChangedListener(mTextEditorWatcher);
 
+        tvCharacterCount.setText(getString(R.string.characters_left, CHARACTER_LIMIT));
+
         loadThumb();
 
     }
@@ -96,7 +101,7 @@ public class ActivityComposeTweet extends Activity {
     }
 
     private void sendTweet(String text){
-        MyTwitterApp.getRestClient().updateStatus(text, new AsyncHttpResponseHandler() {
+        MyTwitterApp.getRestClient().updateStatus(text, new JsonHttpResponseHandler() {
             @Override
             public void onFailure(Throwable error, String details) {
                 super.onFailure(error, details);
@@ -108,11 +113,15 @@ public class ActivityComposeTweet extends Activity {
             }
 
             @Override
-            public void onSuccess(int int0, String string0) {
+            public void onSuccess(JSONObject tweet) {
                 Log.d("DEBUG", "Successfully sent!");
                 Toast.makeText(getApplicationContext(),
                         getResources().getString(R.string.tweet_posted),
                         Toast.LENGTH_SHORT).show();
+
+                Intent i = new Intent();
+                i.putExtra(CREATED_TWEET, Tweet.fromJson(tweet));
+                setResult(RESULT_OK, i);
                 finish();
             }
         });
