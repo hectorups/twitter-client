@@ -3,7 +3,9 @@ pk
 /.idea/workspace.xml
 .DS_Store
 
-/.idea
+.idea/
+*.iml
+
 
 # files for the dex VM
 *.dex
