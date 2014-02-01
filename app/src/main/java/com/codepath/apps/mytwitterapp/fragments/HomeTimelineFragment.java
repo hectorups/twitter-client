@@ -21,34 +21,34 @@ public class HomeTimelineFragment extends TweetsListFragments {
     @Override
     public void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
-
-        loadTweets();
     }
 
-    private void loadTweets(){
-        if( isOnline() ){
-            loadTweetsFromApi();
-        } else {
-            loadTweetsFromDb();
-        }
-    }
-
-    private void loadTweetsFromDb(){
+    @Override
+    protected void loadTweetsFromDb(){
         tweetsAdapter.clear();
-        updateAdaptor(Tweet.recentTweets(TWEETS_PER_LOAD));
+        updateAdaptor(Tweet.recentTweets(TWEETS_PER_LOAD), UPDATE_MODE);
         pullToRefreshLayout.setRefreshComplete();
     }
 
-    private void loadTweetsFromApi(){
-        MyTwitterApp.getRestClient().getHomeTimeline(TWEETS_PER_LOAD, new JsonHttpResponseHandler() {
+    @Override
+    protected void loadTweetsFromApi(final int mode){
+        long maxId = 0;
+        long sinceId = 0;
+
+        if(tweetList.size() > 0){
+            if(mode == LOAD_MORE_MODE){
+                maxId = tweetList.get(tweetList.size() - 1).getTweetId() - 1;
+            } else if(mode == LOAD_UPDATES_MODE){
+                sinceId = tweetList.get(0).getTweetId();
+            }
+        }
+
+        MyTwitterApp.getRestClient().getHomeTimeline(TWEETS_PER_LOAD, maxId, sinceId, new JsonHttpResponseHandler() {
             @Override
             public void onSuccess(JSONArray jsonTweets) {
-                tweetsAdapter.clear();
-                pullToRefreshLayout.setRefreshComplete();
-                Log.d(TAG, jsonTweets.toString());
+                Log.d("DEBUG", jsonTweets.toString());
                 ArrayList<Tweet> tweets = Tweet.fromJson(jsonTweets);
-                updateAdaptor(tweets);
-
+                updateAdaptor(tweets, mode);
             }
 
             @Override
@@ -59,7 +59,4 @@ public class HomeTimelineFragment extends TweetsListFragments {
         });
     }
 
-    public void refresh(){
-        loadTweets();
-    }
 }

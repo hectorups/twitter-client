@@ -8,6 +8,10 @@ import android.support.v4.app.FragmentStatePagerAdapter;
  * Created by hectormonserrate on 26/01/14.
  */
 public class CollectionPagerAdapter extends FragmentStatePagerAdapter {
+
+    private static HomeTimelineFragment homeTimelineFragment;
+    private static MentionsFragment mentionsFragment;
+
     public CollectionPagerAdapter(FragmentManager fm) {
         super(fm);
     }
@@ -15,9 +19,15 @@ public class CollectionPagerAdapter extends FragmentStatePagerAdapter {
     @Override
     public Fragment getItem(int i) {
         if(i == 0){
-            return new HomeTimelineFragment();
+            if(homeTimelineFragment == null ){
+                homeTimelineFragment =  new HomeTimelineFragment();
+            }
+            return homeTimelineFragment;
         } else {
-            return new MentionsFragment();
+            if(mentionsFragment == null ){
+                mentionsFragment =  new MentionsFragment();
+            }
+            return mentionsFragment;
         }
     }
 

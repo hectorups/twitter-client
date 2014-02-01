@@ -21,34 +21,34 @@ public class MentionsFragment extends TweetsListFragments {
     @Override
     public void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
-
-        loadTweets();
     }
 
-    private void loadTweets(){
-        loadTweetsFromApi();
-//        if( isOnline() ){
-//            loadTweetsFromApi();
-//        } else {
-//            loadTweetsFromDb();
-//        }
+    @Override
+    protected void loadTweetsFromDb(){
+//        tweetsAdapter.clear();
+//        updateAdaptor(Tweet.recentTweets(TWEETS_PER_LOAD));
+//        pullToRefreshLayout.setRefreshComplete();
     }
 
-    private void loadTweetsFromDb(){
-        tweetsAdapter.clear();
-        updateAdaptor(Tweet.recentTweets(TWEETS_PER_LOAD));
-        pullToRefreshLayout.setRefreshComplete();
-    }
+    @Override
+    protected void loadTweetsFromApi(final int mode){
+        long maxId = 0;
+        long sinceId = 0;
 
-    private void loadTweetsFromApi(){
-        MyTwitterApp.getRestClient().getMentions( new JsonHttpResponseHandler() {
+        if(tweetList.size() > 0){
+            if(mode == LOAD_MORE_MODE){
+                maxId = tweetList.get(tweetList.size() - 1).getTweetId() - 1;
+            } else if(mode == LOAD_UPDATES_MODE){
+                sinceId = tweetList.get(0).getTweetId();
+            }
+        }
+
+        MyTwitterApp.getRestClient().getMentions(TWEETS_PER_LOAD, maxId, sinceId, new JsonHttpResponseHandler() {
             @Override
             public void onSuccess(JSONArray jsonTweets) {
-                tweetsAdapter.clear();
-                pullToRefreshLayout.setRefreshComplete();
-                Log.d(TAG, jsonTweets.toString());
+                Log.d("DEBUG", jsonTweets.toString());
                 ArrayList<Tweet> tweets = Tweet.fromJson(jsonTweets);
-                updateAdaptor(tweets);
+                updateAdaptor(tweets, mode);
             }
 
             @Override
@@ -59,7 +59,4 @@ public class MentionsFragment extends TweetsListFragments {
         });
     }
 
-    public void refresh(){
-        loadTweets();
-    }
 }
