@@ -68,7 +68,7 @@ public class TimeLineActivity extends ActionBarActivity implements ActionBar.Tab
                 startActivity(i);
                 return true;
             case R.id.action_write_tweet:
-                i = new Intent(getApplicationContext(), ActivityComposeTweet.class);
+                i = new Intent(getApplicationContext(), ComposeTweetActivity.class);
                 startActivityForResult(i, TweetsListFragments.REQUEST_CODE);
                 return true;
             case R.id.action_logout:

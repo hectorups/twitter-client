@@ -13,7 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
 
-import com.codepath.apps.mytwitterapp.ActivityComposeTweet;
+import com.codepath.apps.mytwitterapp.ComposeTweetActivity;
 import com.codepath.apps.mytwitterapp.EndlessScrollListener;
 import com.codepath.apps.mytwitterapp.R;
 import com.codepath.apps.mytwitterapp.TweetsAdapter;
@@ -97,7 +97,7 @@ public abstract class TweetsListFragments extends Fragment {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (resultCode == Activity.RESULT_OK && requestCode == REQUEST_CODE) {
             //loadTweets(LOAD_UPDATES_MODE);
-            Tweet tweet = data.getParcelableExtra(ActivityComposeTweet.CREATED_TWEET);
+            Tweet tweet = data.getParcelableExtra(ComposeTweetActivity.CREATED_TWEET);
             ArrayList<Tweet> tweets = new ArrayList<Tweet>();
             tweets.add(tweet);
             updateAdaptor(tweets, LOAD_UPDATES_MODE);
