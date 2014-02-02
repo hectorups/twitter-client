@@ -6,6 +6,7 @@ import android.os.Parcelable;
 import com.activeandroid.Model;
 import com.activeandroid.annotation.Column;
 import com.activeandroid.annotation.Table;
+import com.activeandroid.query.Delete;
 import com.activeandroid.query.Select;
 
 import org.json.JSONArray;
@@ -27,7 +28,7 @@ public class Tweet extends Model implements Parcelable {
     @Column(name = "body")
     private String body;
 
-    @Column(name = "tweet_id")
+    @Column(name = "tweet_id", unique = true, index = true)
     private Long tweetId;
 
 
@@ -36,6 +37,9 @@ public class Tweet extends Model implements Parcelable {
 
     @Column(name = "created_at", index = true)
     private Date createdAt;
+
+    @Column(name = "my_mention")
+    private boolean myMention;
 
     public User getUser(){
         return user;
@@ -54,7 +58,7 @@ public class Tweet extends Model implements Parcelable {
 
     public Tweet(){super();}
 
-    public static Tweet fromJson(JSONObject jsonObject){
+    public static Tweet fromJson(JSONObject jsonObject, boolean myMention){
         Tweet t = null;
         try{
             Long tweetId = jsonObject.getLong("id");
@@ -63,6 +67,7 @@ public class Tweet extends Model implements Parcelable {
             t.user = User.fromJson(jsonObject.getJSONObject("user"));
             t.body = jsonObject.getString("text");
             t.tweetId = tweetId;
+            if(myMention) t.myMention = true;
             t.setDateFromString(jsonObject.getString("created_at"));
         } catch (JSONException e){
             e.printStackTrace();
@@ -76,7 +81,7 @@ public class Tweet extends Model implements Parcelable {
         this.save();
     }
 
-    public static ArrayList<Tweet> fromJson(JSONArray jsonArray){
+    public static ArrayList<Tweet> fromJson(JSONArray jsonArray, boolean myMention){
         ArrayList<Tweet> tweets = new ArrayList<Tweet>(jsonArray.length());
         for(int i = 0; i < jsonArray.length(); i++){
             JSONObject tweetJson = null;
@@ -87,7 +92,7 @@ public class Tweet extends Model implements Parcelable {
                 continue;
             }
 
-            Tweet tweet = Tweet.fromJson(tweetJson);
+            Tweet tweet = Tweet.fromJson(tweetJson, myMention);
             if(tweet != null){
                 tweet.saveWithUser();
                 tweets.add(tweet);
@@ -102,11 +107,20 @@ public class Tweet extends Model implements Parcelable {
         return new ArrayList<Tweet>(tweetList);
     }
 
+    public static ArrayList<Tweet> recentTweetsWithMentions(int limit) {
+        List<Tweet> tweetList = new Select().from(Tweet.class).where("my_mention = true").orderBy("tweet_id DESC").limit(limit).execute();
+        return new ArrayList<Tweet>(tweetList);
+    }
+
     public static Tweet findById(Long tweetId) {
         return new Select()
                 .from(Tweet.class)
                 .where("tweet_id = ?", tweetId)
                 .executeSingle();
+    }
+
+    public static void deleteAll(){
+        new Delete().from(Tweet.class).execute();
     }
 
     private void setDateFromString(String date) {

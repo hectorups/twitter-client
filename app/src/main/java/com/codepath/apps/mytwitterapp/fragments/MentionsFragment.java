@@ -25,9 +25,8 @@ public class MentionsFragment extends TweetsListFragments {
 
     @Override
     protected void loadTweetsFromDb(){
-//        tweetsAdapter.clear();
-//        updateAdaptor(Tweet.recentTweets(TWEETS_PER_LOAD));
-//        pullToRefreshLayout.setRefreshComplete();
+        updateAdaptor(Tweet.recentTweetsWithMentions(TWEETS_PER_LOAD), UPDATE_MODE);
+        pullToRefreshLayout.setRefreshComplete();
     }
 
     @Override
@@ -47,7 +46,7 @@ public class MentionsFragment extends TweetsListFragments {
             @Override
             public void onSuccess(JSONArray jsonTweets) {
                 Log.d("DEBUG", jsonTweets.toString());
-                ArrayList<Tweet> tweets = Tweet.fromJson(jsonTweets);
+                ArrayList<Tweet> tweets = Tweet.fromJson(jsonTweets, true);
                 updateAdaptor(tweets, mode);
             }
 

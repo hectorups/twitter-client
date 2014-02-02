@@ -32,10 +32,10 @@ public abstract class TweetsListFragments extends Fragment {
     private static final String TWEET_RESULTS = "tweet_results";
     private static final String TAG = "timelineactivity";
     protected static final int TWEETS_PER_LOAD = 25;
+    public final static int REQUEST_CODE = 20;
     protected ListView lvTweets;
     protected TweetsAdapter tweetsAdapter;
     protected PullToRefreshLayout pullToRefreshLayout;
-    private final int REQUEST_CODE = 20;
 
     protected static final int LOAD_MORE_MODE = 1;
     protected static final int LOAD_UPDATES_MODE = 2;
@@ -127,11 +127,6 @@ public abstract class TweetsListFragments extends Fragment {
         }
         return false;
     }
-
-//    @Override
-//    public void onRefreshStarted(View view) {
-//        refresh();
-//    }
 
     private void loadTweets(int mode){
         if( isOnline() ){

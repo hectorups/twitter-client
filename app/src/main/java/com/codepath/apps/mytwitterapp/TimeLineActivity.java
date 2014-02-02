@@ -11,6 +11,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.codepath.apps.mytwitterapp.fragments.CollectionPagerAdapter;
+import com.codepath.apps.mytwitterapp.fragments.TweetsListFragments;
+import com.codepath.apps.mytwitterapp.models.Tweet;
 import com.codepath.apps.mytwitterapp.models.User;
 import com.loopj.android.http.JsonHttpResponseHandler;
 
@@ -67,15 +69,24 @@ public class TimeLineActivity extends ActionBarActivity implements ActionBar.Tab
                 return true;
             case R.id.action_write_tweet:
                 i = new Intent(getApplicationContext(), ActivityComposeTweet.class);
-                startActivity(i);
+                startActivityForResult(i, TweetsListFragments.REQUEST_CODE);
                 return true;
             case R.id.action_logout:
                 MyTwitterApp.getRestClient().clearAccessToken();
+                Tweet.deleteAll();
                 i = new Intent(getApplicationContext(), LoginActivity.class);
                 startActivity(i);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
+        }
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (resultCode == RESULT_OK && requestCode == TweetsListFragments.REQUEST_CODE) {
+            TweetsListFragments tweetsListFragments = (TweetsListFragments) collectionPagerAdapter.getItem(0);
+            tweetsListFragments.onActivityResult(requestCode, resultCode, data);
         }
     }
 

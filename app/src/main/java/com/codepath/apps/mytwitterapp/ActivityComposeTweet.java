@@ -120,7 +120,7 @@ public class ActivityComposeTweet extends Activity {
                         Toast.LENGTH_SHORT).show();
 
                 Intent i = new Intent();
-                i.putExtra(CREATED_TWEET, Tweet.fromJson(tweet));
+                i.putExtra(CREATED_TWEET, Tweet.fromJson(tweet, false));
                 setResult(RESULT_OK, i);
                 finish();
             }
