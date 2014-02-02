@@ -94,7 +94,6 @@ public class Tweet extends Model implements Parcelable {
 
             Tweet tweet = Tweet.fromJson(tweetJson, myMention);
             if(tweet != null){
-                tweet.saveWithUser();
                 tweets.add(tweet);
             }
         }
@@ -102,13 +101,20 @@ public class Tweet extends Model implements Parcelable {
         return tweets;
     }
 
+    public static void saveTweets(ArrayList<Tweet> tweets){
+        for(Tweet tweet: tweets){
+            tweet.saveWithUser();
+        }
+    }
+
+
     public static ArrayList<Tweet> recentTweets(int limit) {
         List<Tweet> tweetList = new Select().from(Tweet.class).orderBy("tweet_id DESC").limit(limit).execute();
         return new ArrayList<Tweet>(tweetList);
     }
 
     public static ArrayList<Tweet> recentTweetsWithMentions(int limit) {
-        List<Tweet> tweetList = new Select().from(Tweet.class).where("my_mention = true").orderBy("tweet_id DESC").limit(limit).execute();
+        List<Tweet> tweetList = new Select().from(Tweet.class).where("my_mention = ?", true).orderBy("tweet_id DESC").limit(limit).execute();
         return new ArrayList<Tweet>(tweetList);
     }
 

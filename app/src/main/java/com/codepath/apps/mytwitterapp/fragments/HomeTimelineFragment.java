@@ -10,7 +10,8 @@ import com.loopj.android.http.JsonHttpResponseHandler;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import java.util.ArrayList;
+import rx.android.concurrency.AndroidSchedulers;
+import rx.concurrency.Schedulers;
 
 /**
  * Created by hectormonserrate on 26/01/14.
@@ -46,8 +47,11 @@ public class HomeTimelineFragment extends TweetsListFragments {
             @Override
             public void onSuccess(JSONArray jsonTweets) {
                 Log.d("DEBUG", jsonTweets.toString());
-                ArrayList<Tweet> tweets = Tweet.fromJson(jsonTweets, false);
-                updateAdaptor(tweets, mode);
+
+                saveTweetsObservable(jsonTweets)
+                        .subscribeOn(Schedulers.newThread())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(saveTweetsObserver(mode));
             }
 
             @Override

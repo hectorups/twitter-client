@@ -19,8 +19,15 @@ import com.codepath.apps.mytwitterapp.R;
 import com.codepath.apps.mytwitterapp.TweetsAdapter;
 import com.codepath.apps.mytwitterapp.models.Tweet;
 
+import org.json.JSONArray;
+
 import java.util.ArrayList;
 
+import rx.Observable;
+import rx.Observer;
+import rx.Subscription;
+import rx.subscriptions.Subscriptions;
+import rx.util.functions.Action1;
 import uk.co.senab.actionbarpulltorefresh.extras.actionbarcompat.PullToRefreshLayout;
 import uk.co.senab.actionbarpulltorefresh.library.ActionBarPullToRefresh;
 import uk.co.senab.actionbarpulltorefresh.library.listeners.OnRefreshListener;
@@ -148,6 +155,36 @@ public abstract class TweetsListFragments extends Fragment {
         public void onLoadMore(int page, int totalItemsCount) {
             loadTweets(LOAD_MORE_MODE);
         }
+    };
+
+    /* Rx */
+
+    protected Observable<ArrayList<Tweet>> saveTweetsObservable(final JSONArray jsonTweets) {
+        return Observable.create(new Observable.OnSubscribeFunc<ArrayList<Tweet>>() {
+            @Override
+            public Subscription onSubscribe(Observer<? super ArrayList<Tweet>> tweetObserver) {
+                try {
+                    ArrayList<Tweet> tweets = Tweet.fromJson(jsonTweets, true);
+                    // Give tweets immediately to observer so they can be shown in UI
+                    tweetObserver.onNext(tweets);
+                    // Continue to save the tweets to DB
+                    Tweet.saveTweets(tweets);
+                    tweetObserver.onCompleted();
+                } catch (Exception e) {
+                    tweetObserver.onError(e);
+                }
+                return Subscriptions.empty();
+            }
+        });
+    }
+
+    protected Action1<ArrayList<Tweet>> saveTweetsObserver(final int mode){
+        return (new Action1<ArrayList<Tweet>>() {
+            @Override
+            public void call(ArrayList<Tweet> tweets) {
+                updateAdaptor(tweets, mode);
+            }
+        });
     };
 
     /* Abstract methods */
