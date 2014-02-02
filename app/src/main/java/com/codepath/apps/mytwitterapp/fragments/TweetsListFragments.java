@@ -72,7 +72,7 @@ public abstract class TweetsListFragments extends Fragment {
         return v;
     }
 
-    private void setupUI(View v){
+    public void setupUI(View v){
         lvTweets = (ListView) v.findViewById(R.id.lvTweet);
         tweetsAdapter = new TweetsAdapter(getActivity(), tweetList);
         lvTweets.setAdapter(tweetsAdapter);

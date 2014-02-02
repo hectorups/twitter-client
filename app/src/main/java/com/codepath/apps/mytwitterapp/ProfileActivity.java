@@ -3,7 +3,10 @@ package com.codepath.apps.mytwitterapp;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 
-import com.codepath.apps.mytwitterapp.fragments.ProfileFragment;
+import com.codepath.apps.mytwitterapp.models.User;
+import com.loopj.android.http.JsonHttpResponseHandler;
+
+import org.json.JSONObject;
 
 public class ProfileActivity extends ActionBarActivity {
 
@@ -12,11 +15,18 @@ public class ProfileActivity extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
 
-        if (savedInstanceState == null) {
-            getSupportFragmentManager().beginTransaction()
-                    .add(R.id.container, new ProfileFragment())
-                    .commit();
-        }
+        loadProfileInfo();
+    }
+
+    protected void loadProfileInfo(){
+        MyTwitterApp.getRestClient().getMyInfo(new JsonHttpResponseHandler(){
+            @Override
+            public void onSuccess(JSONObject json){
+                User u = User.fromJson(json);
+                getActionBar().setTitle("@" + u.getName());
+
+            }
+        });
     }
 
 
