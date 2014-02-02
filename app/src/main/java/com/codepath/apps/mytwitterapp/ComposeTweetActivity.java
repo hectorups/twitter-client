@@ -20,7 +20,7 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 
 import org.json.JSONObject;
 
-public class ActivityComposeTweet extends Activity {
+public class ComposeTweetActivity extends Activity {
     private static final String TAG = "ancitivitycomposetweet";
     public static final String CREATED_TWEET = "com.codepath.apps.mytwitterapp.activitycomposetweet.created_tweet";
 
