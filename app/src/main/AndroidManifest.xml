@@ -49,7 +49,7 @@
             android:label="@string/title_activity_time_line" >
         </activity>
         <activity
-            android:name="com.codepath.apps.mytwitterapp.ActivityComposeTweet"
+            android:name="com.codepath.apps.mytwitterapp.ComposeTweetActivity"
             android:label="@string/title_activity_activity_compose_tweet" >
         </activity>
         <activity
