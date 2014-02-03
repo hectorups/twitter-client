@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.util.Log;
 
 import com.codepath.apps.mytwitterapp.MyTwitterApp;
+import com.codepath.apps.mytwitterapp.models.User;
 import com.loopj.android.http.JsonHttpResponseHandler;
 
 import org.json.JSONArray;
@@ -17,10 +18,26 @@ import rx.concurrency.Schedulers;
  */
 public class UserTimelineFragment extends TweetsListFragments {
     protected String TAG = "UserTimelineFragment";
+    private static final String EXTRA_USER = "user";
+
+    private User user;
+
+    public static UserTimelineFragment newInstance(User user){
+        Bundle args = new Bundle();
+        args.putParcelable(EXTRA_USER, user);
+
+        UserTimelineFragment fragment = new UserTimelineFragment();
+        fragment.setArguments(args);
+
+        return fragment;
+    }
 
     @Override
-    public void onCreate(Bundle savedInstanceState){
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setRetainInstance(true);
+
+        user = getArguments().getParcelable(EXTRA_USER);
     }
 
     @Override
@@ -42,7 +59,12 @@ public class UserTimelineFragment extends TweetsListFragments {
             }
         }
 
-        MyTwitterApp.getRestClient().getUserTimeline(TWEETS_PER_LOAD, maxId, sinceId, new JsonHttpResponseHandler() {
+        long userId = 0;
+        if( user != null ){
+            userId = user.getUserId();
+        }
+
+        MyTwitterApp.getRestClient().getUserTimeline(TWEETS_PER_LOAD, maxId, sinceId, userId, new JsonHttpResponseHandler() {
             @Override
             public void onSuccess(JSONArray jsonTweets) {
                 Log.d("DEBUG", jsonTweets.toString());

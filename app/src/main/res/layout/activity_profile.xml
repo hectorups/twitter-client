@@ -15,12 +15,11 @@
         android:layout_height="wrap_content"
      />
 
-    <fragment
-       android:layout_width="match_parent"
-       android:layout_height="match_parent"
-       android:id="@+id/fragmentUserTimeline"
-       android:name="com.codepath.apps.mytwitterapp.fragments.UserTimelineFragment"
-       tools:layout="@layout/fragment_tweets_list" />
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/fragmentUserTimeline"
+        />
 
 </LinearLayout>
 

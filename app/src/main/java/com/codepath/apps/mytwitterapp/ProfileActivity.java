@@ -6,6 +6,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v7.app.ActionBarActivity;
 
 import com.codepath.apps.mytwitterapp.fragments.ProfileInfoFragment;
+import com.codepath.apps.mytwitterapp.fragments.UserTimelineFragment;
 import com.codepath.apps.mytwitterapp.models.User;
 
 public class ProfileActivity extends ActionBarActivity {
@@ -20,12 +21,20 @@ public class ProfileActivity extends ActionBarActivity {
         User user = getIntent().getParcelableExtra(EXTRA_USER);
 
         FragmentManager fm = getSupportFragmentManager();
-        Fragment fragment = fm.findFragmentById(R.id.fragmentContainer);
+        Fragment profileInfoFragment = fm.findFragmentById(R.id.fragmentContainer);
+        Fragment timeLineFragment = fm.findFragmentById(R.id.fragmentUserTimeline);
 
-        if(fragment == null){
-            fragment = ProfileInfoFragment.newInstance(user);
+        if(profileInfoFragment == null){
+            profileInfoFragment = ProfileInfoFragment.newInstance(user);
             fm.beginTransaction()
-                    .add(R.id.fragmentContainer, fragment)
+                    .add(R.id.fragmentContainer, profileInfoFragment)
+                    .commit();
+        }
+
+        if(timeLineFragment == null){
+            timeLineFragment = UserTimelineFragment.newInstance(user);
+            fm.beginTransaction()
+                    .add(R.id.fragmentUserTimeline, timeLineFragment)
                     .commit();
         }
 
