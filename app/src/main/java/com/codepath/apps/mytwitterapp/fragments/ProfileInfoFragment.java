@@ -20,7 +20,7 @@ import org.json.JSONObject;
  * Created by hectormonserrate on 02/02/14.
  */
 public class ProfileInfoFragment extends Fragment {
-    private static final String EXTRA_USER_ID = "user_id";
+    private static final String EXTRA_USER = "user";
 
     private ImageView ivProfile;
     private TextView tvName;
@@ -29,9 +29,11 @@ public class ProfileInfoFragment extends Fragment {
     private TextView tvFollowing;
     private ImageView ivBgProfile;
 
-    public static ProfileInfoFragment newInstance(int userId){
+    private User user;
+
+    public static ProfileInfoFragment newInstance(User user){
         Bundle args = new Bundle();
-        args.putInt(EXTRA_USER_ID, userId);
+        args.putParcelable(EXTRA_USER, user);
 
         ProfileInfoFragment fragment = new ProfileInfoFragment();
         fragment.setArguments(args);
@@ -43,6 +45,8 @@ public class ProfileInfoFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setRetainInstance(true);
+
+        user = getArguments().getParcelable(EXTRA_USER);
     }
 
     @Override
@@ -63,6 +67,25 @@ public class ProfileInfoFragment extends Fragment {
     }
 
     protected void loadProfileInfo(){
+        if(user != null){
+            loadOtherProfileInfo();
+        } else {
+            loadMyProfileInfo();
+        }
+    }
+
+    protected void loadOtherProfileInfo(){
+        MyTwitterApp.getRestClient().getAccountInformation(user.getUserId(), user.getScreenName(), new JsonHttpResponseHandler() {
+            @Override
+            public void onSuccess(JSONObject json) {
+                User u = User.fromJson(json);
+                getActivity().getActionBar().setTitle("@" + u.getName());
+                populateProfileView(u);
+            }
+        });
+    }
+
+    protected void loadMyProfileInfo(){
         MyTwitterApp.getRestClient().getMyInfo(new JsonHttpResponseHandler(){
             @Override
             public void onSuccess(JSONObject json){

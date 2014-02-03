@@ -1,8 +1,10 @@
 package com.codepath.apps.mytwitterapp;
 
 import android.content.Context;
+import android.content.Intent;
 import android.text.Html;
 import android.text.format.DateUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -30,11 +32,22 @@ public class TweetsAdapter extends ArrayAdapter<Tweet>{
             tweetView = inflater.inflate(R.layout.tweet_item, null);
         }
 
-        Tweet t = getItem(position);
+        final Tweet t = getItem(position);
 
         // Author Avatar
         ImageView ivAuthorAvatar = (ImageView)tweetView.findViewById(R.id.ivProfile);
         ImageLoader.getInstance().displayImage(t.getUser().getProfileImageUrl(), ivAuthorAvatar);
+
+        ivAuthorAvatar.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v) {
+                Log.d("adf", "go to profile " + t.getUser().getUserId());
+                Intent i = new Intent(getContext(), ProfileActivity.class);
+                i.putExtra(ProfileActivity.EXTRA_USER, t.getUser());
+                getContext().startActivity(i);
+            }
+        });
+
 
         // Author name
         TextView tvAuthorName = (TextView)tweetView.findViewById(R.id.tvName);
