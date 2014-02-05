@@ -2,6 +2,8 @@
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
+    android:divider="@drawable/horizontal_divider"
+    android:showDividers="middle"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
@@ -14,7 +16,7 @@
             android:id="@+id/ivBgProfile"
             android:layout_width="match_parent"
             android:layout_height="190dp"
-            android:src="@android:drawable/screen_background_dark_transparent"
+            android:background="#a3acb2"
             android:scaleType="centerCrop"/>
 
         <RelativeLayout
@@ -32,9 +34,9 @@
                 android:layout_centerHorizontal="true">
 
                 <ImageView
-                    android:layout_width="75dp"
-                    android:layout_height="75dp"
-                    android:src="@android:drawable/screen_background_light"
+                    android:layout_width="78dp"
+                    android:layout_height="78dp"
+                    android:src="@drawable/rounded_white_frame"
                      />
 
                 <ImageView

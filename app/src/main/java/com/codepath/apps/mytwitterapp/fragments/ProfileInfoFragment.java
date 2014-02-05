@@ -103,7 +103,10 @@ public class ProfileInfoFragment extends Fragment {
         tvFollowing.setText(u.getFriendsCount() + "");
         tvDescription.setText(u.getTagLine());
         ImageLoader.getInstance().displayImage(u.getProfileImageUrl(), ivProfile);
-        ImageLoader.getInstance().displayImage(u.getProfileBannerUrl(), ivBgProfile);
+
+        if(u.getProfileBackgroundImageUrl() != null){
+            ImageLoader.getInstance().displayImage(u.getProfileBannerUrl(), ivBgProfile);
+        }
     }
 
 }

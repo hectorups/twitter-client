@@ -108,7 +108,11 @@ public class User extends Model implements Parcelable {
 
             u.tagLine = json.getString("description");
 
-            u.profileBannerUrl = json.getString("profile_banner_url");
+            if( json.has("profile_banner_url")){
+                u.profileBannerUrl = json.getString("profile_banner_url");
+            } else {
+                u.profileBannerUrl = null;
+            }
 
         } catch(Exception e){
             e.printStackTrace();
