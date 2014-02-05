@@ -1,12 +1,13 @@
 package com.codepath.apps.mytwitterapp;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.ActionBarActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
+import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -20,7 +21,7 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 
 import org.json.JSONObject;
 
-public class ComposeTweetActivity extends Activity {
+public class ComposeTweetActivity extends ActionBarActivity {
     private static final String TAG = "ancitivitycomposetweet";
     public static final String CREATED_TWEET = "com.codepath.apps.mytwitterapp.activitycomposetweet.created_tweet";
 
@@ -38,6 +39,9 @@ public class ComposeTweetActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        supportRequestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
+
         setContentView(R.layout.activity_compose_tweet);
 
         etTweetContents = (EditText) findViewById(R.id.etTweetContents);
@@ -101,6 +105,7 @@ public class ComposeTweetActivity extends Activity {
     }
 
     private void sendTweet(String text){
+        setProgressBarIndeterminateVisibility(true);
         MyTwitterApp.getRestClient().updateStatus(text, new JsonHttpResponseHandler() {
             @Override
             public void onFailure(Throwable error, String details) {
@@ -115,6 +120,7 @@ public class ComposeTweetActivity extends Activity {
             @Override
             public void onSuccess(JSONObject tweet) {
                 Log.d("DEBUG", "Successfully sent!");
+                setProgressBarIndeterminateVisibility(false);
                 Toast.makeText(getApplicationContext(),
                         getResources().getString(R.string.tweet_posted),
                         Toast.LENGTH_SHORT).show();

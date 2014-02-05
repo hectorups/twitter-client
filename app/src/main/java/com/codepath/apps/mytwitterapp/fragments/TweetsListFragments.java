@@ -121,6 +121,7 @@ public abstract class TweetsListFragments extends Fragment {
                 tweetList.addAll(0, tweets);
         }
 
+        getActivity().setProgressBarIndeterminateVisibility(false);
         tweetsAdapter.notifyDataSetChanged();
     }
 
@@ -136,6 +137,7 @@ public abstract class TweetsListFragments extends Fragment {
     }
 
     private void loadTweets(int mode){
+        getActivity().setProgressBarIndeterminateVisibility(true);
         if( isOnline() ){
             loadTweetsFromApi(mode);
         } else {

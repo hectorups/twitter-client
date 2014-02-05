@@ -9,6 +9,7 @@ import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.Window;
 
 import com.codepath.apps.mytwitterapp.fragments.CollectionPagerAdapter;
 import com.codepath.apps.mytwitterapp.fragments.TweetsListFragments;
@@ -29,6 +30,9 @@ public class TimeLineActivity extends ActionBarActivity implements ActionBar.Tab
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        supportRequestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
+
         setContentView(R.layout.activity_time_line);
 
         loadProfileInfo();

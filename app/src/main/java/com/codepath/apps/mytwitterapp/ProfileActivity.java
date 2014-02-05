@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.ActionBarActivity;
+import android.view.Window;
 
 import com.codepath.apps.mytwitterapp.fragments.ProfileInfoFragment;
 import com.codepath.apps.mytwitterapp.fragments.UserTimelineFragment;
@@ -16,6 +17,9 @@ public class ProfileActivity extends ActionBarActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        supportRequestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
+
         setContentView(R.layout.activity_profile);
 
         User user = getIntent().getParcelableExtra(EXTRA_USER);
