@@ -25,6 +25,9 @@ public class ComposeTweetActivity extends ActionBarActivity {
     private static final String TAG = "ancitivitycomposetweet";
     public static final String CREATED_TWEET = "com.codepath.apps.mytwitterapp.activitycomposetweet.created_tweet";
 
+    public static final String REPLY_TWEET = "reply_tweet";
+    private Tweet replyTweet;
+
     private final int CHARACTER_LIMIT = 140;
     private final String TWEET = "tweet";
 
@@ -41,6 +44,8 @@ public class ComposeTweetActivity extends ActionBarActivity {
         super.onCreate(savedInstanceState);
 
         supportRequestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
+
+        replyTweet = getIntent().getParcelableExtra(REPLY_TWEET);
 
         setContentView(R.layout.activity_compose_tweet);
 
@@ -82,6 +87,11 @@ public class ComposeTweetActivity extends ActionBarActivity {
 
         etTweetContents.addTextChangedListener(mTextEditorWatcher);
 
+        if(replyTweet != null){
+            etTweetContents.setText("@" + replyTweet.getUser().getName() + " ");
+            etTweetContents.setSelection(etTweetContents.getText().length());
+        }
+
         tvCharacterCount.setText(getString(R.string.characters_left, CHARACTER_LIMIT));
 
         loadThumb();
@@ -106,7 +116,13 @@ public class ComposeTweetActivity extends ActionBarActivity {
 
     private void sendTweet(String text){
         setProgressBarIndeterminateVisibility(true);
-        MyTwitterApp.getRestClient().updateStatus(text, new JsonHttpResponseHandler() {
+
+        long inReplyStatusId = 0;
+        if( replyTweet != null ){
+            inReplyStatusId = replyTweet.getTweetId();
+        }
+
+        MyTwitterApp.getRestClient().updateStatus(text, inReplyStatusId, new JsonHttpResponseHandler() {
             @Override
             public void onFailure(Throwable error, String details) {
                 super.onFailure(error, details);
