@@ -26,7 +26,7 @@ public class HomeTimelineFragment extends TweetsListFragments {
 
     @Override
     protected void loadTweetsFromDb(){
-        updateAdaptor(Tweet.recentTweets(TWEETS_PER_LOAD), UPDATE_MODE);
+        updateAdapter(Tweet.recentTweets(TWEETS_PER_LOAD), UPDATE_MODE);
         pullToRefreshLayout.setRefreshComplete();
     }
 

@@ -1,7 +1,9 @@
 package com.codepath.apps.mytwitterapp;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.support.v4.app.FragmentActivity;
 import android.text.Html;
 import android.text.format.DateUtils;
 import android.view.LayoutInflater;
@@ -11,6 +13,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.codepath.apps.mytwitterapp.fragments.TweetsListFragments;
 import com.codepath.apps.mytwitterapp.models.Tweet;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
@@ -18,12 +21,13 @@ import java.util.List;
 
 public class TweetsAdapter extends ArrayAdapter<Tweet>{
 
+    private TweetsListFragments fragment;
     public TweetsAdapter(Context context, List<Tweet> objects) {
         super(context, 0, objects);
     }
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
+    public View getView(final int position, View convertView, ViewGroup parent) {
         View tweetView = convertView;
 
         if(tweetView == null) {
@@ -53,7 +57,7 @@ public class TweetsAdapter extends ArrayAdapter<Tweet>{
             public void onClick(View v) {
                 Intent i = new Intent(getContext(), ComposeTweetActivity.class);
                 i.putExtra(ComposeTweetActivity.REPLY_TWEET, t);
-                getContext().startActivity(i);
+                ((FragmentActivity) getContext()).startActivityForResult(i, FragmentActivity.RESULT_OK);
             }
         });
 
@@ -78,7 +82,7 @@ public class TweetsAdapter extends ArrayAdapter<Tweet>{
             public void onClick(View v) {
                 Intent i = new Intent(getContext(), TweeterDetailActivity.class);
                 i.putExtra(TweeterDetailActivity.TWEET_EXTRA, t);
-                getContext().startActivity(i);
+                ((FragmentActivity) getContext()).startActivityForResult(i, Activity.RESULT_OK);
             }
         });
 

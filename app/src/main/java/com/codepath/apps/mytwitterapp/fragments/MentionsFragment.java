@@ -26,7 +26,7 @@ public class MentionsFragment extends TweetsListFragments {
 
     @Override
     protected void loadTweetsFromDb(){
-        updateAdaptor(Tweet.recentTweetsWithMentions(TWEETS_PER_LOAD), UPDATE_MODE);
+        updateAdapter(Tweet.recentTweetsWithMentions(TWEETS_PER_LOAD), UPDATE_MODE);
         pullToRefreshLayout.setRefreshComplete();
     }
 

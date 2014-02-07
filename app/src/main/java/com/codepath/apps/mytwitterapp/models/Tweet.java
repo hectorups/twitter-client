@@ -190,4 +190,8 @@ public class Tweet extends Model implements Parcelable {
         }
     };
 
+    public boolean equals(Tweet b){
+        return this.getTweetId() == b.getTweetId();
+    }
+
 }

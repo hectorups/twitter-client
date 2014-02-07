@@ -34,12 +34,15 @@ public class TweeterDetailFragment extends Fragment {
     private ImageView ivReplyTweet;
     private ImageView ivRetweet;
 
-    public static TweeterDetailFragment newInstance(Tweet tweet){
+    private TweetDetailsCallbacks tweetDetailsCallbacks;
+
+    public static TweeterDetailFragment newInstance(Tweet tweet, TweetDetailsCallbacks callbacks){
         Bundle args = new Bundle();
         args.putParcelable(TWEET_EXTRA, tweet);
 
         TweeterDetailFragment fragment = new TweeterDetailFragment();
         fragment.setArguments(args);
+        fragment.tweetDetailsCallbacks = callbacks;
 
         return fragment;
     }
@@ -72,7 +75,7 @@ public class TweeterDetailFragment extends Fragment {
             public void onClick(View v) {
                 Intent i = new Intent(getActivity(), ProfileActivity.class);
                 i.putExtra(ProfileActivity.EXTRA_USER, tweet.getUser());
-                getActivity().startActivity(i);
+                startActivity(i);
             }
         });
 
@@ -100,7 +103,7 @@ public class TweeterDetailFragment extends Fragment {
             public void onClick(View v) {
                 Intent i = new Intent(getActivity(), ComposeTweetActivity.class);
                 i.putExtra(ComposeTweetActivity.REPLY_TWEET, tweet);
-                getActivity().startActivity(i);
+                startActivity(i);
             }
         });
 
@@ -149,11 +152,20 @@ public class TweeterDetailFragment extends Fragment {
                 Toast.makeText(getActivity().getApplicationContext(),
                         getResources().getString(R.string.retweet_success)
                         , Toast.LENGTH_SHORT).show();
-                getActivity().setProgressBarIndeterminateVisibility(false);
+
                 ivRetweet.setImageResource(R.drawable.ic_green_retweet);
                 ivRetweet.setOnClickListener(null);
                 tweet.setRetweeted(true);
+                tweet.save();
+                tweetDetailsCallbacks.tweetUpdated(tweet);
+
+                getActivity().setProgressBarIndeterminateVisibility(false);
             }
         });
+    }
+
+
+    public static interface TweetDetailsCallbacks {
+        public void tweetUpdated(Tweet tweet);
     }
 }

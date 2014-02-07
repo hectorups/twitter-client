@@ -16,6 +16,7 @@ import android.widget.ListView;
 import com.codepath.apps.mytwitterapp.ComposeTweetActivity;
 import com.codepath.apps.mytwitterapp.EndlessScrollListener;
 import com.codepath.apps.mytwitterapp.R;
+import com.codepath.apps.mytwitterapp.TweeterDetailActivity;
 import com.codepath.apps.mytwitterapp.TweetsAdapter;
 import com.codepath.apps.mytwitterapp.models.Tweet;
 
@@ -40,6 +41,7 @@ public abstract class TweetsListFragments extends Fragment {
     private static final String TAG = "timelineactivity";
     protected static final int TWEETS_PER_LOAD = 25;
     public final static int REQUEST_CODE = 20;
+    public final static int TWEET_UPDATED = 21;
     protected ListView lvTweets;
     protected TweetsAdapter tweetsAdapter;
     protected PullToRefreshLayout pullToRefreshLayout;
@@ -95,18 +97,31 @@ public abstract class TweetsListFragments extends Fragment {
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (resultCode == Activity.RESULT_OK && requestCode == REQUEST_CODE) {
+        if (resultCode != Activity.RESULT_OK) return;
+
+        if( requestCode == REQUEST_CODE) {
             //loadTweets(LOAD_UPDATES_MODE);
             Tweet tweet = data.getParcelableExtra(ComposeTweetActivity.CREATED_TWEET);
             ArrayList<Tweet> tweets = new ArrayList<Tweet>();
             tweets.add(tweet);
-            updateAdaptor(tweets, LOAD_UPDATES_MODE);
+            updateAdapter(tweets, LOAD_UPDATES_MODE);
+        } else if( requestCode == TWEET_UPDATED ){
+            Tweet tweet = data.getParcelableExtra(TweeterDetailActivity.UPDATED_TWEET);
+            replaceTweetOnadapter(tweet);
         }
     }
 
+    public void replaceTweetOnadapter(Tweet tweet){
+        for(int i = 0; i < tweetList.size(); i++){
+            if( tweetList.get(i).equals(tweet)){
+                tweetList.set(i, tweet);
+                break;
+            }
+        }
+        tweetsAdapter.notifyDataSetChanged();
+    }
 
-
-    public void updateAdaptor(ArrayList<Tweet> tweets, int mode){
+    public void updateAdapter(ArrayList<Tweet> tweets, int mode){
         pullToRefreshLayout.setRefreshComplete();
 
         if(mode == UPDATE_MODE){
@@ -184,7 +199,7 @@ public abstract class TweetsListFragments extends Fragment {
         return (new Action1<ArrayList<Tweet>>() {
             @Override
             public void call(ArrayList<Tweet> tweets) {
-                updateAdaptor(tweets, mode);
+                updateAdapter(tweets, mode);
             }
         });
     };
