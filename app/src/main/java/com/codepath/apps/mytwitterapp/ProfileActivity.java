@@ -6,10 +6,11 @@ import android.support.v4.app.FragmentManager;
 import android.support.v7.app.ActionBarActivity;
 import android.view.Window;
 
+import com.codepath.apps.mytwitterapp.fragments.TweetsListFragments;
 import com.codepath.apps.mytwitterapp.fragments.UserTimelineFragment;
 import com.codepath.apps.mytwitterapp.models.User;
 
-public class ProfileActivity extends ActionBarActivity {
+public class ProfileActivity extends ActionBarActivity implements  TweetsListFragments.Callbacks{
 
     public static final String EXTRA_USER = "user_extra";
 
@@ -37,9 +38,10 @@ public class ProfileActivity extends ActionBarActivity {
 
     }
 
-
-
-
+    @Override
+    public void onLoading(boolean loading){
+        setProgressBarIndeterminateVisibility(loading);
+    }
 
 
 }

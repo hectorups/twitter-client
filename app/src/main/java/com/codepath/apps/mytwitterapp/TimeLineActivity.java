@@ -19,7 +19,9 @@ import com.loopj.android.http.JsonHttpResponseHandler;
 
 import org.json.JSONObject;
 
-public class TimeLineActivity extends ActionBarActivity implements ActionBar.TabListener {
+public class TimeLineActivity extends ActionBarActivity
+        implements ActionBar.TabListener, TweetsListFragments.Callbacks {
+
     private static final String TAG = "timelineactivity";
 
     CollectionPagerAdapter collectionPagerAdapter;
@@ -149,6 +151,11 @@ public class TimeLineActivity extends ActionBarActivity implements ActionBar.Tab
 
     @Override
     public void onTabReselected(ActionBar.Tab tab, FragmentTransaction fragmentTransaction) {}
+
+    @Override
+    public void onLoading(boolean loading){
+        setProgressBarIndeterminateVisibility(loading);
+    }
 
 
 }

@@ -1,19 +1,19 @@
 package com.codepath.apps.mytwitterapp.fragments;
 
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
 
 import com.codepath.apps.mytwitterapp.MyTwitterApp;
-import com.codepath.apps.mytwitterapp.ProfileTweetsAdapter;
-import com.codepath.apps.mytwitterapp.TweetsAdapter;
-import com.codepath.apps.mytwitterapp.models.Tweet;
+import com.codepath.apps.mytwitterapp.R;
 import com.codepath.apps.mytwitterapp.models.User;
 import com.loopj.android.http.JsonHttpResponseHandler;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
-
-import java.util.ArrayList;
 
 import rx.android.concurrency.AndroidSchedulers;
 import rx.concurrency.Schedulers;
@@ -37,22 +37,23 @@ public class UserTimelineFragment extends TweetsListFragments {
         return fragment;
     }
 
-    // Add dummy Tweet for the header
     @Override
-    public ArrayList<Tweet> createNewList(){
-        ArrayList<Tweet> list =  new ArrayList<Tweet>();
-        list.add(new Tweet());
-        return list;
-    }
+    public void setupUI(LayoutInflater inflater, View v){
+        super.setupUI(inflater, v);
 
-    @Override
-    public int firstTweetPosition(){
-        return 1;
-    }
+        View header = inflater.inflate(R.layout.profile_header_item, null);
 
-    @Override
-    public TweetsAdapter getAdapter(){
-        return new ProfileTweetsAdapter(this, getActivity(), tweetList, user);
+        lvTweets.addHeaderView(header);
+
+        FragmentManager fm = getChildFragmentManager();
+        Fragment profileInfoFragment = fm.findFragmentById(R.id.fragmentProfileInfo);
+        if(profileInfoFragment == null){
+            profileInfoFragment = ProfileInfoFragment.newInstance(user);
+            fm.beginTransaction()
+                    .add(R.id.fragmentProfileInfo, profileInfoFragment)
+                    .commit();
+        }
+
     }
 
     @Override

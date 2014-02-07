@@ -52,6 +52,24 @@ public abstract class TweetsListFragments extends Fragment {
 
     protected ArrayList<Tweet> tweetList;
 
+    private Callbacks callbacks;
+
+    public interface Callbacks {
+        void onLoading(boolean loading);
+    }
+
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+        callbacks = (Callbacks)activity;
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        callbacks = null;
+    }
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup parent, Bundle savedInstanceState) {
@@ -64,7 +82,7 @@ public abstract class TweetsListFragments extends Fragment {
             tweetList = new ArrayList<Tweet>();
         }
 
-        setupUI(v);
+        setupUI(inflater, v);
 
         // If we dont have tweets try to load them now
         if(tweetList.size() == 0){
@@ -78,7 +96,7 @@ public abstract class TweetsListFragments extends Fragment {
         return new ArrayList<Tweet>();
     }
 
-    public void setupUI(View v){
+    public void setupUI(LayoutInflater inflater, View v){
         lvTweets = (ListView) v.findViewById(R.id.lvTweet);
         tweetsAdapter = getAdapter();
         lvTweets.setAdapter(tweetsAdapter);
@@ -144,7 +162,7 @@ public abstract class TweetsListFragments extends Fragment {
                 tweetList.addAll(firstTweetPosition(), tweets);
         }
 
-        getActivity().setProgressBarIndeterminateVisibility(false);
+        if(callbacks != null) callbacks.onLoading(false);
         tweetsAdapter.notifyDataSetChanged();
     }
 
@@ -164,7 +182,7 @@ public abstract class TweetsListFragments extends Fragment {
     }
 
     private void loadTweets(int mode){
-        getActivity().setProgressBarIndeterminateVisibility(true);
+        if(callbacks != null) callbacks.onLoading(true);
         if( isOnline() ){
             loadTweetsFromApi(mode);
         } else {
