@@ -29,8 +29,7 @@ public class Tweet extends Model implements Parcelable {
     private String body;
 
     @Column(name = "tweet_id", unique = true, index = true)
-    private Long tweetId;
-
+    private long tweetId;
 
     @Column(name = "User")
     private User user;
@@ -55,7 +54,7 @@ public class Tweet extends Model implements Parcelable {
 
     public Date getCreatedAt(){ return createdAt; }
 
-    public Long getTweetId(){
+    public long getTweetId(){
         return tweetId;
     }
 
@@ -72,7 +71,7 @@ public class Tweet extends Model implements Parcelable {
     public static Tweet fromJson(JSONObject jsonObject, boolean myMention){
         Tweet t = null;
         try{
-            Long tweetId = jsonObject.getLong("id");
+            long tweetId = jsonObject.getLong("id");
             t = Tweet.findById(tweetId);
             if(t == null) t = new Tweet();
             t.user = User.fromJson(jsonObject.getJSONObject("user"));
