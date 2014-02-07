@@ -92,7 +92,7 @@ public abstract class TweetsListFragments extends Fragment {
     }
 
     public TweetsAdapter getAdapter(){
-        return new TweetsAdapter(getActivity(), tweetList);
+        return new TweetsAdapter(this, getActivity(), tweetList);
     }
 
     @Override

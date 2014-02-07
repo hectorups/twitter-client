@@ -25,9 +25,8 @@ public class ProfileTweetsAdapter extends TweetsAdapter {
     private Fragment fragment;
 
     public ProfileTweetsAdapter(Fragment fragment, Context context, List<Tweet> objects, User user) {
-        super(context, objects);
+        super(fragment, context, objects);
         this.user = user;
-        this.fragment = fragment;
     }
 
     // Return an integer representing the type by fetching the enum type ordinal

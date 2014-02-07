@@ -1,9 +1,8 @@
 package com.codepath.apps.mytwitterapp;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.Fragment;
 import android.text.Html;
 import android.text.format.DateUtils;
 import android.view.LayoutInflater;
@@ -21,9 +20,10 @@ import java.util.List;
 
 public class TweetsAdapter extends ArrayAdapter<Tweet>{
 
-    private TweetsListFragments fragment;
-    public TweetsAdapter(Context context, List<Tweet> objects) {
+    protected Fragment fragment;
+    public TweetsAdapter(Fragment fragment, Context context, List<Tweet> objects) {
         super(context, 0, objects);
+        this.fragment = fragment;
     }
 
     @Override
@@ -57,7 +57,7 @@ public class TweetsAdapter extends ArrayAdapter<Tweet>{
             public void onClick(View v) {
                 Intent i = new Intent(getContext(), ComposeTweetActivity.class);
                 i.putExtra(ComposeTweetActivity.REPLY_TWEET, t);
-                ((FragmentActivity) getContext()).startActivityForResult(i, FragmentActivity.RESULT_OK);
+                fragment.startActivityForResult(i, TweetsListFragments.REQUEST_CODE);
             }
         });
 
@@ -82,7 +82,7 @@ public class TweetsAdapter extends ArrayAdapter<Tweet>{
             public void onClick(View v) {
                 Intent i = new Intent(getContext(), TweeterDetailActivity.class);
                 i.putExtra(TweeterDetailActivity.TWEET_EXTRA, t);
-                ((FragmentActivity) getContext()).startActivityForResult(i, Activity.RESULT_OK);
+                fragment.startActivityForResult(i, TweetsListFragments.TWEET_UPDATED);
             }
         });
 

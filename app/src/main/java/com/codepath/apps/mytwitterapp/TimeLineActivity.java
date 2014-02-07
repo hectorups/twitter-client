@@ -88,9 +88,13 @@ public class TimeLineActivity extends ActionBarActivity implements ActionBar.Tab
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (resultCode == RESULT_OK && requestCode == TweetsListFragments.REQUEST_CODE) {
+        if (resultCode != RESULT_OK) return;
+
+        if( requestCode == TweetsListFragments.REQUEST_CODE) {
             TweetsListFragments tweetsListFragments = (TweetsListFragments) collectionPagerAdapter.getItem(0);
             tweetsListFragments.onActivityResult(requestCode, resultCode, data);
+        } else {
+            super.onActivityResult(requestCode, resultCode, data);
         }
     }
 
