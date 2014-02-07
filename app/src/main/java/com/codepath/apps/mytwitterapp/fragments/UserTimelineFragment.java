@@ -4,11 +4,16 @@ import android.os.Bundle;
 import android.util.Log;
 
 import com.codepath.apps.mytwitterapp.MyTwitterApp;
+import com.codepath.apps.mytwitterapp.ProfileTweetsAdapter;
+import com.codepath.apps.mytwitterapp.TweetsAdapter;
+import com.codepath.apps.mytwitterapp.models.Tweet;
 import com.codepath.apps.mytwitterapp.models.User;
 import com.loopj.android.http.JsonHttpResponseHandler;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
+
+import java.util.ArrayList;
 
 import rx.android.concurrency.AndroidSchedulers;
 import rx.concurrency.Schedulers;
@@ -32,10 +37,28 @@ public class UserTimelineFragment extends TweetsListFragments {
         return fragment;
     }
 
+    // Add dummy Tweet for the header
+    @Override
+    public ArrayList<Tweet> createNewList(){
+        ArrayList<Tweet> list =  new ArrayList<Tweet>();
+        list.add(new Tweet());
+        return list;
+    }
+
+    @Override
+    public int firstTweetPosition(){
+        return 1;
+    }
+
+    @Override
+    public TweetsAdapter getAdapter(){
+        return new ProfileTweetsAdapter(this, getActivity(), tweetList, user);
+    }
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setRetainInstance(true);
+        //setRetainInstance(true);
 
         user = getArguments().getParcelable(EXTRA_USER);
     }

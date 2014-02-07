@@ -44,7 +44,7 @@ public class ProfileInfoFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setRetainInstance(true);
+        //setRetainInstance(true);
 
         user = getArguments().getParcelable(EXTRA_USER);
     }
@@ -79,7 +79,7 @@ public class ProfileInfoFragment extends Fragment {
             @Override
             public void onSuccess(JSONObject json) {
                 User u = User.fromJson(json);
-                getActivity().getActionBar().setTitle("@" + u.getName());
+                //getActivity().getActionBar().setTitle("@" + u.getName());
                 populateProfileView(u);
             }
         });
@@ -90,7 +90,7 @@ public class ProfileInfoFragment extends Fragment {
             @Override
             public void onSuccess(JSONObject json){
                 User u = User.fromJson(json);
-                getActivity().getActionBar().setTitle("@" + u.getName());
+                //getActivity().getActionBar().setTitle("@" + u.getName());
                 populateProfileView(u);
             }
         });

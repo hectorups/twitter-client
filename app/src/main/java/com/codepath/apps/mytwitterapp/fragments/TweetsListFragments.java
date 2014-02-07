@@ -74,9 +74,13 @@ public abstract class TweetsListFragments extends Fragment {
         return v;
     }
 
+    public ArrayList<Tweet> createNewList(){
+        return new ArrayList<Tweet>();
+    }
+
     public void setupUI(View v){
         lvTweets = (ListView) v.findViewById(R.id.lvTweet);
-        tweetsAdapter = new TweetsAdapter(getActivity(), tweetList);
+        tweetsAdapter = getAdapter();
         lvTweets.setAdapter(tweetsAdapter);
         lvTweets.setOnScrollListener(endlessScrollListener);
 
@@ -85,6 +89,10 @@ public abstract class TweetsListFragments extends Fragment {
                 .allChildrenArePullable()
                 .listener(onRefreshListener)
                 .setup(pullToRefreshLayout);
+    }
+
+    public TweetsAdapter getAdapter(){
+        return new TweetsAdapter(getActivity(), tweetList);
     }
 
     @Override
@@ -133,11 +141,15 @@ public abstract class TweetsListFragments extends Fragment {
                 tweetList.addAll(tweets);
                 break;
             default:
-                tweetList.addAll(0, tweets);
+                tweetList.addAll(firstTweetPosition(), tweets);
         }
 
         getActivity().setProgressBarIndeterminateVisibility(false);
         tweetsAdapter.notifyDataSetChanged();
+    }
+
+    public int firstTweetPosition(){
+        return 0;
     }
 
     public boolean isOnline() {
