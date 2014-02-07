@@ -73,6 +73,14 @@ public class TweetsAdapter extends ArrayAdapter<Tweet>{
         // Tweet Text
         TextView tvTextView = (TextView)tweetView.findViewById(R.id.tvBody);
         tvTextView.setText(t.getBody());
+        tvTextView.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(getContext(), TweeterDetailActivity.class);
+                i.putExtra(TweeterDetailActivity.TWEET_EXTRA, t);
+                getContext().startActivity(i);
+            }
+        });
 
         // Time
         TextView tvCreatedAt = (TextView)tweetView.findViewById(R.id.tvCreatedAt);

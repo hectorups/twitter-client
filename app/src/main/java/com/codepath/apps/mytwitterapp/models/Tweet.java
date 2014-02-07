@@ -41,6 +41,9 @@ public class Tweet extends Model implements Parcelable {
     @Column(name = "my_mention")
     private boolean myMention;
 
+    @Column(name = "retweeted")
+    private boolean retweeted;
+
     public User getUser(){
         return user;
     }
@@ -58,6 +61,14 @@ public class Tweet extends Model implements Parcelable {
 
     public Tweet(){super();}
 
+    public boolean isRetweeted() {
+        return retweeted;
+    }
+
+    public void setRetweeted(boolean retweeted) {
+        this.retweeted = retweeted;
+    }
+
     public static Tweet fromJson(JSONObject jsonObject, boolean myMention){
         Tweet t = null;
         try{
@@ -69,6 +80,7 @@ public class Tweet extends Model implements Parcelable {
             t.tweetId = tweetId;
             if(myMention) t.myMention = true;
             t.setDateFromString(jsonObject.getString("created_at"));
+            t.retweeted = jsonObject.getBoolean("retweeted");
         } catch (JSONException e){
             e.printStackTrace();
         }
@@ -146,6 +158,8 @@ public class Tweet extends Model implements Parcelable {
         tweetId = in.readLong();
         user = in.readParcelable(User.class.getClassLoader());
         createdAt = new Date(in.readLong());
+        myMention = in.readInt() == 0 ? false : true;
+        retweeted = in.readInt() == 0 ? false : true;
     }
 
     @Override
@@ -159,6 +173,8 @@ public class Tweet extends Model implements Parcelable {
         dest.writeLong(tweetId);
         dest.writeParcelable(user, flags);
         dest.writeLong(createdAt.getTime());
+        dest.writeInt(myMention ? 1 : 0);
+        dest.writeInt(retweeted ? 1 : 0);
     }
 
     @SuppressWarnings("unused")

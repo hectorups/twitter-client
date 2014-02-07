@@ -21,6 +21,8 @@
     <string name="logout">Log out</string>
     <string name="tweet_prompt">What is happening ?</string>
     <string name="title_activity_profile">ProfileActivity</string>
-
+    <string name="title_activity_tweeter_detail">TweeterDetailActivity</string>
+    <string name="retweet_success">Retweeted</string>
+    <string name="retweet_failure">Retweet failed</string>
 
 </resources>
