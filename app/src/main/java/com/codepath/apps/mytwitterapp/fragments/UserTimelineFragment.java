@@ -1,19 +1,26 @@
 package com.codepath.apps.mytwitterapp.fragments;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ImageView;
 
 import com.codepath.apps.mytwitterapp.MyTwitterApp;
 import com.codepath.apps.mytwitterapp.R;
+import com.codepath.apps.mytwitterapp.TweetsAdapter;
+import com.codepath.apps.mytwitterapp.models.Tweet;
 import com.codepath.apps.mytwitterapp.models.User;
 import com.loopj.android.http.JsonHttpResponseHandler;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
+
+import java.util.List;
 
 import rx.android.concurrency.AndroidSchedulers;
 import rx.concurrency.Schedulers;
@@ -106,6 +113,32 @@ public class UserTimelineFragment extends TweetsListFragments {
                 pullToRefreshLayout.setRefreshComplete();
             }
         });
+    }
+
+    @Override
+    public TweetsAdapter getAdapter(){
+        return new UserTimelineTweetsAdapter(user, this, getActivity(), tweetList);
+    }
+
+    public class UserTimelineTweetsAdapter extends TweetsAdapter {
+
+        protected User profileUser;
+
+        public UserTimelineTweetsAdapter(User profileUser, Fragment fragment, Context context, List<Tweet> objects) {
+            super(fragment, context, objects);
+            this.profileUser = profileUser;
+        }
+
+        public View getView(final int position, View convertView, ViewGroup parent) {
+            View v = super.getView(position, convertView, parent);
+
+            // Dont let go to a profile of the profile we already watch
+            ImageView ivAuthorAvatar = (ImageView) v.findViewById(R.id.ivProfile);
+            ivAuthorAvatar.setOnClickListener(null);
+
+            return v;
+        }
+
     }
 
 }
