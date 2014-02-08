@@ -1,2 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources></resources>
+<resources>
+
+    <color name="mt_mid_grey">#FFABABAB</color>
+    <color name="mt_light_grey">#FFD8D8D8</color>
+    <color name="mt_border">#DCDEE0</color>
+    <color name="mt_navy_gray">#58616F</color>
+    <color name="mt_gray">#9B9b9B</color>
+
+</resources>
