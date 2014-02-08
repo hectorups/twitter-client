@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@android:color/white"
-    android:divider="@drawable/horizontal_divider"
+    android:divider="@drawable/horizontal_gray_dividier"
     android:showDividers="middle"
     android:orientation="vertical" >
 
@@ -26,7 +26,7 @@
                 />
 
             <LinearLayout
-                android:layout_marginLeft="5dp"
+                android:layout_marginLeft="8dp"
                 android:layout_gravity="center_vertical"
                 android:orientation="vertical"
                 android:layout_width="match_parent"
@@ -52,7 +52,7 @@
         </LinearLayout>
 
         <TextView
-            android:layout_marginTop="5dp"
+            android:layout_marginTop="8dp"
             android:id="@+id/tvBody"
             android:textSize="18dp"
             android:layout_width="match_parent"
@@ -68,6 +68,29 @@
             style="@style/MT.GrayText"/>
 
     </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/llTweetsCounter"
+        android:layout_width="wrap_content"
+        android:orientation="horizontal"
+        android:layout_height="wrap_content"
+        android:padding="10dp"
+        android:gravity="center">
+
+        <TextView
+            android:textStyle="bold"
+            android:id="@+id/tvTweetsCounter"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:layout_marginLeft="5dp"
+            android:textColor="@color/mt_gray"
+            android:text="@string/tweets_count"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+    </LinearLayout>
+
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -93,7 +116,7 @@
             android:id="@+id/ivFavorite"
             android:layout_width="0dp"
             android:layout_weight="1"
-            android:layout_height="35dp"
+            android:layout_height="30dp"
             android:src="@drawable/ic_favorite_normal"/>
 
 

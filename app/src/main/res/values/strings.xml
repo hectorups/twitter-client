@@ -28,5 +28,7 @@
     <string name="tweets_count">TWEETS</string>
     <string name="followers_count">FOLLOWERS</string>
     <string name="following_count">FOLLOWING</string>
+    <string name="retweets_count">RETWEETS</string>
+    <string name="favorites_count">FAVORITES</string>
 
 </resources>

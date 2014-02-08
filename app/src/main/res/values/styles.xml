@@ -27,12 +27,12 @@
     </style>
 
     <style name="MT.SmallButton.Grey" parent="style/MT.SmallButton">
-        <item name="android:textColor">#FF747474</item>
+        <item name="android:textColor">@color/mt_gray</item>
         <item name="android:background">@drawable/btn_small_grey</item>
     </style>
 
     <style name="MT.GrayText">
-        <item name="android:textColor">#FF747474</item>
+        <item name="android:textColor">@color/mt_gray</item>
         <item name="android:textSize">13dp</item>
     </style>
 
@@ -46,7 +46,7 @@
     </style>
 
     <style name="MT.profileTabsTitle">
-        <item name="android:textColor">#FF747474</item>
+        <item name="android:textColor">@color/mt_gray</item>
     </style>
 
 </resources>

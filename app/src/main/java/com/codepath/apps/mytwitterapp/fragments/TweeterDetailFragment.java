@@ -9,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -35,6 +36,10 @@ public class TweeterDetailFragment extends Fragment {
     private ImageView ivReplyTweet;
     private ImageView ivRetweet;
     private ImageView ivFavorite;
+    private TextView tvTweetsCounter;
+    private LinearLayout llTweetsCounter;
+
+    private int favoritesCount = 0;
 
     private TweetDetailsCallbacks tweetDetailsCallbacks;
 
@@ -71,6 +76,9 @@ public class TweeterDetailFragment extends Fragment {
     private void setupUI(View tweetView){
         ImageView ivAuthorAvatar = (ImageView)tweetView.findViewById(R.id.ivProfile);
         ImageLoader.getInstance().displayImage(tweet.getUser().getProfileImageUrl(), ivAuthorAvatar);
+
+        tvTweetsCounter = (TextView) tweetView.findViewById(R.id.tvTweetsCounter);
+        llTweetsCounter = (LinearLayout) tweetView.findViewById(R.id.llTweetsCounter);
 
         ivAuthorAvatar.setOnClickListener(new View.OnClickListener(){
             @Override
@@ -121,7 +129,10 @@ public class TweeterDetailFragment extends Fragment {
 
         // Retweet
         ivRetweet = (ImageView) tweetView.findViewById(R.id.ivReTweet);
-        if(tweet.isRetweeted()){
+        if( tweet.getUser().getUserId() == MyTwitterApp.getPreferences().getCurrentUserId() ){
+            ivRetweet.setEnabled(false);
+        }
+        else if(tweet.isRetweeted()){
             ivRetweet.setImageResource(R.drawable.ic_green_retweet);
         } else {
             ivRetweet.setOnClickListener(new View.OnClickListener(){
@@ -135,6 +146,20 @@ public class TweeterDetailFragment extends Fragment {
         // Time
         TextView tvCreatedAt = (TextView)tweetView.findViewById(R.id.tvCreatedAt);
         tvCreatedAt.setText(new SimpleDateFormat("HH:mmaa - yy MMM dd").format(tweet.getCreatedAt()));
+
+        // Counters
+        updateCounters();
+    }
+
+    private void updateCounters(){
+        // Tweets
+        if( tweet.getTweetsCount() == 0){
+            llTweetsCounter.setVisibility(View.GONE);
+
+        } else {
+            llTweetsCounter.setVisibility(View.VISIBLE);
+            tvTweetsCounter.setText(String.valueOf(tweet.getTweetsCount()));
+        }
     }
 
 
@@ -157,9 +182,10 @@ public class TweeterDetailFragment extends Fragment {
                 ivRetweet.setImageResource(R.drawable.ic_green_retweet);
                 ivRetweet.setOnClickListener(null);
                 tweet.setRetweeted(true);
+                tweet.setTweetsCount(tweet.getTweetsCount() + 1);
                 tweet.save();
                 tweetDetailsCallbacks.tweetUpdated(tweet);
-
+                updateCounters();
                 getActivity().setProgressBarIndeterminateVisibility(false);
             }
         });
@@ -182,10 +208,11 @@ public class TweeterDetailFragment extends Fragment {
             @Override
             public void onSuccess(JSONObject jsonTweet) {
                 tweet.setFavorited(!tweet.isFavorited());
+                favoritesCount = tweet.isFavorited() ? 1 : -1;
                 tweet.save();
                 tweetDetailsCallbacks.tweetUpdated(tweet);
                 setFavoriteIcon();
-
+                updateCounters();
                 getActivity().setProgressBarIndeterminateVisibility(false);
             }
         });

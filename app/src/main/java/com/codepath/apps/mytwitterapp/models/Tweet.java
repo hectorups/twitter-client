@@ -47,6 +47,17 @@ public class Tweet extends Model implements Parcelable {
     @Column(name = "favorited")
     private boolean favorited;
 
+    @Column(name = "tweets_count")
+    private int tweetsCount;
+
+    public int getTweetsCount() {
+        return tweetsCount;
+    }
+
+    public void setTweetsCount(int tweetsCount) {
+        this.tweetsCount = tweetsCount;
+    }
+
     public User getUser(){
         return user;
     }
@@ -91,6 +102,7 @@ public class Tweet extends Model implements Parcelable {
             t.setDateFromString(jsonObject.getString("created_at"));
             t.retweeted = jsonObject.getBoolean("retweeted");
             t.favorited = jsonObject.getBoolean("favorited");
+            t.tweetsCount = jsonObject.getInt("retweet_count");
         } catch (JSONException e){
             e.printStackTrace();
         }
@@ -190,6 +202,7 @@ public class Tweet extends Model implements Parcelable {
         myMention = in.readInt() == 0 ? false : true;
         retweeted = in.readInt() == 0 ? false : true;
         favorited = in.readInt() == 0 ? false : true;
+        tweetsCount = in.readInt();
     }
 
     @Override
@@ -206,6 +219,7 @@ public class Tweet extends Model implements Parcelable {
         dest.writeInt(myMention ? 1 : 0);
         dest.writeInt(retweeted ? 1 : 0);
         dest.writeInt(favorited ? 1 : 0);
+        dest.writeInt(tweetsCount);
     }
 
     @SuppressWarnings("unused")

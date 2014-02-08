@@ -79,6 +79,7 @@ public class TimeLineActivity extends ActionBarActivity
                 return true;
             case R.id.action_logout:
                 MyTwitterApp.getRestClient().clearAccessToken();
+                MyTwitterApp.getPreferences().setUserId(null);
                 Tweet.deleteAll();
                 i = new Intent(getApplicationContext(), LoginActivity.class);
                 startActivity(i);
