@@ -19,7 +19,7 @@ public class User extends Model implements Parcelable {
     @Column(name = "name")
     private String name;
 
-    @Column(name = "user_id")
+    @Column(name="user_id", unique=true, onUniqueConflict = Column.ConflictAction.REPLACE)
     private Long userId;
 
     @Column(name = "screen_name")

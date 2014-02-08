@@ -29,7 +29,7 @@ public class Tweet extends Model implements Parcelable {
     @Column(name = "body")
     private String body;
 
-    @Column(name = "tweet_id", unique = true, index = true)
+    @Column(name="tweet_id", unique=true, onUniqueConflict = Column.ConflictAction.REPLACE)
     private long tweetId;
 
     @Column(name = "User")
@@ -76,7 +76,7 @@ public class Tweet extends Model implements Parcelable {
 
     public void setFavorited(boolean favorited) { this.favorited = favorited; }
 
-    public static Tweet fromJson(JSONObject jsonObject, boolean myMention){
+    public static Tweet fromJson(JSONObject jsonObject, long currentuserId){
         Tweet t = null;
         try{
             long tweetId = jsonObject.getLong("id");
@@ -85,7 +85,9 @@ public class Tweet extends Model implements Parcelable {
             t.user = User.fromJson(jsonObject.getJSONObject("user"));
             t.body = jsonObject.getString("text");
             t.tweetId = tweetId;
-            if(myMention) t.myMention = true;
+            if(currentuserId != 0){
+                t.myMention = isUserMentioned(jsonObject.getJSONObject("entities").getJSONArray("user_mentions"), currentuserId);
+            }
             t.setDateFromString(jsonObject.getString("created_at"));
             t.retweeted = jsonObject.getBoolean("retweeted");
             t.favorited = jsonObject.getBoolean("favorited");
@@ -96,12 +98,28 @@ public class Tweet extends Model implements Parcelable {
         return  t;
     }
 
+    private static boolean isUserMentioned(JSONArray jsonArray, long userId){
+        for(int i = 0; i < jsonArray.length(); i++){
+            JSONObject mentionJson;
+            try{
+                mentionJson = jsonArray.getJSONObject(i);
+                if(mentionJson.getLong("id") == userId){
+                    return true;
+                }
+            }catch (Exception e){
+                e.printStackTrace();
+            }
+        }
+
+        return false;
+    }
+
     public void saveWithUser(){
         user.save();
         this.save();
     }
 
-    public static ArrayList<Tweet> fromJson(JSONArray jsonArray, boolean myMention){
+    public static ArrayList<Tweet> fromJson(JSONArray jsonArray, long currentuserId){
         ArrayList<Tweet> tweets = new ArrayList<Tweet>(jsonArray.length());
         for(int i = 0; i < jsonArray.length(); i++){
             JSONObject tweetJson = null;
@@ -112,7 +130,7 @@ public class Tweet extends Model implements Parcelable {
                 continue;
             }
 
-            Tweet tweet = Tweet.fromJson(tweetJson, myMention);
+            Tweet tweet = Tweet.fromJson(tweetJson, currentuserId);
             if(tweet != null){
                 tweets.add(tweet);
             }
@@ -123,14 +141,11 @@ public class Tweet extends Model implements Parcelable {
 
     public static void saveTweets(ArrayList<Tweet> tweets){
         ActiveAndroid.beginTransaction();
-        try {
-            for(Tweet tweet: tweets){
-                tweet.saveWithUser();
-            }
+        for(Tweet tweet: tweets){
+            tweet.saveWithUser();
         }
-        finally {
-            ActiveAndroid.endTransaction();
-        }
+        ActiveAndroid.setTransactionSuccessful();
+        ActiveAndroid.endTransaction();
     }
 
 
@@ -140,7 +155,7 @@ public class Tweet extends Model implements Parcelable {
     }
 
     public static ArrayList<Tweet> recentTweetsWithMentions(int limit) {
-        List<Tweet> tweetList = new Select().from(Tweet.class).where("my_mention = ?", true).orderBy("tweet_id DESC").limit(limit).execute();
+        List<Tweet> tweetList = new Select().from(Tweet.class).where("my_mention = ?", 1).orderBy("tweet_id DESC").limit(limit).execute();
         return new ArrayList<Tweet>(tweetList);
     }
 

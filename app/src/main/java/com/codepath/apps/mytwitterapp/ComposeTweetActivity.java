@@ -142,7 +142,7 @@ public class ComposeTweetActivity extends ActionBarActivity {
                         Toast.LENGTH_SHORT).show();
 
                 Intent i = new Intent();
-                i.putExtra(CREATED_TWEET, Tweet.fromJson(tweet, false));
+                i.putExtra(CREATED_TWEET, Tweet.fromJson(tweet, MyTwitterApp.getPreferences().getCurrentUserId()));
                 setResult(RESULT_OK, i);
                 finish();
             }

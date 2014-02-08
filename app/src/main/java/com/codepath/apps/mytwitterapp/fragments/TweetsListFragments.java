@@ -15,6 +15,7 @@ import android.widget.ListView;
 
 import com.codepath.apps.mytwitterapp.ComposeTweetActivity;
 import com.codepath.apps.mytwitterapp.EndlessScrollListener;
+import com.codepath.apps.mytwitterapp.MyTwitterApp;
 import com.codepath.apps.mytwitterapp.R;
 import com.codepath.apps.mytwitterapp.TweeterDetailActivity;
 import com.codepath.apps.mytwitterapp.TweetsAdapter;
@@ -211,7 +212,7 @@ public abstract class TweetsListFragments extends Fragment {
             @Override
             public Subscription onSubscribe(Observer<? super ArrayList<Tweet>> tweetObserver) {
                 try {
-                    ArrayList<Tweet> tweets = Tweet.fromJson(jsonTweets, true);
+                    ArrayList<Tweet> tweets = Tweet.fromJson(jsonTweets,  MyTwitterApp.getPreferences().getCurrentUserId());
                     // Give tweets immediately to observer so they can be shown in UI
                     tweetObserver.onNext(tweets);
                     // Continue to save the tweets to DB
