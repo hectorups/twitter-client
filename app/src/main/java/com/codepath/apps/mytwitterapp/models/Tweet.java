@@ -3,6 +3,7 @@ package com.codepath.apps.mytwitterapp.models;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.activeandroid.ActiveAndroid;
 import com.activeandroid.Model;
 import com.activeandroid.annotation.Column;
 import com.activeandroid.annotation.Table;
@@ -113,8 +114,14 @@ public class Tweet extends Model implements Parcelable {
     }
 
     public static void saveTweets(ArrayList<Tweet> tweets){
-        for(Tweet tweet: tweets){
-            tweet.saveWithUser();
+        ActiveAndroid.beginTransaction();
+        try {
+            for(Tweet tweet: tweets){
+                tweet.saveWithUser();
+            }
+        }
+        finally {
+            ActiveAndroid.endTransaction();
         }
     }
 
