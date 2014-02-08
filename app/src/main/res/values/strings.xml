@@ -24,6 +24,7 @@
     <string name="title_activity_tweeter_detail">TweeterDetailActivity</string>
     <string name="retweet_success">Retweeted</string>
     <string name="retweet_failure">Retweet failed</string>
+    <string name="favorite_failure">Favorite Failure</string>
     <string name="tweets_count">TWEETS</string>
     <string name="followers_count">FOLLOWERS</string>
     <string name="following_count">FOLLOWING</string>

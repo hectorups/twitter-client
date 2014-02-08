@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.text.Html;
-import android.text.format.DateUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -23,6 +22,8 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 
 import org.json.JSONObject;
 
+import java.text.SimpleDateFormat;
+
 /**
  * Created by hectormonserrate on 04/02/14.
  */
@@ -33,6 +34,7 @@ public class TweeterDetailFragment extends Fragment {
 
     private ImageView ivReplyTweet;
     private ImageView ivRetweet;
+    private ImageView ivFavorite;
 
     private TweetDetailsCallbacks tweetDetailsCallbacks;
 
@@ -107,6 +109,16 @@ public class TweeterDetailFragment extends Fragment {
             }
         });
 
+        // Favorite
+        ivFavorite = (ImageView) tweetView.findViewById(R.id.ivFavorite);
+        setFavoriteIcon();
+        ivFavorite.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v) {
+                favorite();
+            }
+        });
+
         // Retweet
         ivRetweet = (ImageView) tweetView.findViewById(R.id.ivReTweet);
         if(tweet.isRetweeted()){
@@ -122,14 +134,7 @@ public class TweeterDetailFragment extends Fragment {
 
         // Time
         TextView tvCreatedAt = (TextView)tweetView.findViewById(R.id.tvCreatedAt);
-        String relativeDate = (String) DateUtils.getRelativeDateTimeString(
-                getActivity(),
-                tweet.getCreatedAt().getTime(),
-                DateUtils.MINUTE_IN_MILLIS,
-                DateUtils.WEEK_IN_MILLIS,
-                0);
-        String[] parts = relativeDate.split(",");
-        tvCreatedAt.setText(parts[0].trim());
+        tvCreatedAt.setText(new SimpleDateFormat("HH:mmaa - yy MMM dd").format(tweet.getCreatedAt()));
     }
 
 
@@ -140,7 +145,7 @@ public class TweeterDetailFragment extends Fragment {
             @Override
             public void onFailure(Throwable error, String details) {
                 super.onFailure(error, details);
-                Log.d("DEBUG", "Failed tweet!: " + details);
+                Log.d("DEBUG", "Failed retweet!: " + details);
                 Toast.makeText(getActivity().getApplicationContext(),
                         getResources().getString(R.string.retweet_failure)
                         , Toast.LENGTH_SHORT).show();
@@ -149,10 +154,6 @@ public class TweeterDetailFragment extends Fragment {
 
             @Override
             public void onSuccess(JSONObject jsonTweet) {
-                Toast.makeText(getActivity().getApplicationContext(),
-                        getResources().getString(R.string.retweet_success)
-                        , Toast.LENGTH_SHORT).show();
-
                 ivRetweet.setImageResource(R.drawable.ic_green_retweet);
                 ivRetweet.setOnClickListener(null);
                 tweet.setRetweeted(true);
@@ -162,6 +163,43 @@ public class TweeterDetailFragment extends Fragment {
                 getActivity().setProgressBarIndeterminateVisibility(false);
             }
         });
+    }
+
+    private void favorite(){
+        getActivity().setProgressBarIndeterminateVisibility(true);
+
+        MyTwitterApp.getRestClient().favorite(tweet.getTweetId(), !tweet.isFavorited(), new JsonHttpResponseHandler() {
+            @Override
+            public void onFailure(Throwable error, String details) {
+                super.onFailure(error, details);
+                Log.d("DEBUG", "Failed favorite!: " + details);
+                Toast.makeText(getActivity().getApplicationContext(),
+                        getResources().getString(R.string.favorite_failure)
+                        , Toast.LENGTH_SHORT).show();
+                getActivity().setProgressBarIndeterminateVisibility(false);
+            }
+
+            @Override
+            public void onSuccess(JSONObject jsonTweet) {
+                tweet.setFavorited(!tweet.isFavorited());
+                tweet.save();
+                tweetDetailsCallbacks.tweetUpdated(tweet);
+                setFavoriteIcon();
+
+                getActivity().setProgressBarIndeterminateVisibility(false);
+            }
+        });
+    }
+
+    private void setFavoriteIcon(){
+        int drawable;
+        if(tweet.isFavorited()){
+            drawable = R.drawable.ic_favorite_on;
+        } else {
+            drawable = R.drawable.ic_favorite_normal;
+        }
+
+        ivFavorite.setImageResource(drawable);
     }
 
 
