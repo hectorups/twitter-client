@@ -44,6 +44,7 @@ public class UserTimelineFragment extends TweetsListFragments {
         View header = inflater.inflate(R.layout.profile_header_item, null);
 
         lvTweets.addHeaderView(header);
+        lvTweets.setHeaderDividersEnabled(true);
 
         FragmentManager fm = getChildFragmentManager();
         Fragment profileInfoFragment = fm.findFragmentById(R.id.fragmentProfileInfo);

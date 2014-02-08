@@ -16,6 +16,8 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 
 import org.json.JSONObject;
 
+import java.text.DecimalFormat;
+
 /**
  * Created by hectormonserrate on 02/02/14.
  */
@@ -27,6 +29,7 @@ public class ProfileInfoFragment extends Fragment {
     private TextView tvDescription;
     private TextView tvFollowers;
     private TextView tvFollowing;
+    private TextView tvTweets;
     private ImageView ivBgProfile;
 
     private User user;
@@ -59,6 +62,7 @@ public class ProfileInfoFragment extends Fragment {
         tvFollowers = (TextView) v.findViewById(R.id.tvFollowers);
         tvFollowing = (TextView) v.findViewById(R.id.tvFollowing);
         ivBgProfile = (ImageView) v.findViewById(R.id.ivBgProfile);
+        tvTweets = (TextView) v.findViewById(R.id.tvTweets);
 
 
         loadProfileInfo();
@@ -97,10 +101,14 @@ public class ProfileInfoFragment extends Fragment {
     }
 
     private void populateProfileView(User u){
+
+        DecimalFormat formatter = new DecimalFormat("#,###");
+
         tvName.setText(u.getName());
         tvDescription.setText(u.getScreenName());
-        tvFollowers.setText(u.getFollowersCount() + "");
-        tvFollowing.setText(u.getFriendsCount() + "");
+        tvFollowers.setText(formatter.format(u.getFollowersCount()));
+        tvFollowing.setText(formatter.format(u.getFriendsCount()));
+        tvTweets.setText(formatter.format(u.getTweetsCount()));
         tvDescription.setText(u.getTagLine());
         ImageLoader.getInstance().displayImage(u.getProfileImageUrl(), ivProfile);
 

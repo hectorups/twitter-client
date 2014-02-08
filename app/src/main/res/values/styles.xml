@@ -36,4 +36,17 @@
         <item name="android:textSize">13dp</item>
     </style>
 
+    <style name="MT.profileTabs">
+        <item name="android:layout_marginLeft">10dp</item>
+        <item name="android:paddingBottom">5dp</item>
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:orientation">vertical</item>
+    </style>
+
+    <style name="MT.profileTabsTitle">
+        <item name="android:textColor">#FF747474</item>
+    </style>
+
 </resources>

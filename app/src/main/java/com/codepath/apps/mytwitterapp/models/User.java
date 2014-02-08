@@ -40,6 +40,9 @@ public class User extends Model implements Parcelable {
     @Column(name = "friends_count")
     private int friendsCount;
 
+    @Column(name = "tweets_count")
+    private int tweetsCount;
+
     @Column(name = "description")
     private String tagLine;
 
@@ -47,6 +50,9 @@ public class User extends Model implements Parcelable {
         return tagLine;
     }
 
+    public int getTweetsCount() {
+        return tweetsCount;
+    }
 
     public String getProfileBannerUrl(){ return profileBannerUrl; }
 
@@ -106,6 +112,8 @@ public class User extends Model implements Parcelable {
 
             u.friendsCount = json.getInt("friends_count");
 
+            u.tweetsCount = json.getInt("statuses_count");
+
             u.tagLine = json.getString("description");
 
             if( json.has("profile_banner_url")){
@@ -140,6 +148,7 @@ public class User extends Model implements Parcelable {
         profileBackgroundImageUrl = in.readString();
         followersCount = in.readInt();
         friendsCount = in.readInt();
+        tweetsCount = in.readInt();
     }
 
     @Override
@@ -156,6 +165,7 @@ public class User extends Model implements Parcelable {
         dest.writeString(profileBackgroundImageUrl);
         dest.writeInt(followersCount);
         dest.writeInt(friendsCount);
+        dest.writeInt(tweetsCount);
     }
 
     @SuppressWarnings("unused")
