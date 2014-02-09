@@ -112,8 +112,8 @@ public class ProfileInfoFragment extends Fragment {
         tvDescription.setText(u.getTagLine());
         ImageLoader.getInstance().displayImage(u.getProfileImageUrl(), ivProfile);
 
-        if(u.getProfileBackgroundImageUrl() != null){
-            ImageLoader.getInstance().displayImage(u.getProfileBannerUrl(), ivBgProfile);
+        if(u.getProfileBannerUrl() != null){
+            ImageLoader.getInstance().displayImage(u.getProfileBannerUrl() + "/web", ivBgProfile);
         }
     }
 
