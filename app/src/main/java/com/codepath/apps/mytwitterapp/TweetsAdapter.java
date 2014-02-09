@@ -2,7 +2,6 @@ package com.codepath.apps.mytwitterapp;
 
 import android.content.Context;
 import android.content.Intent;
-import android.support.v4.app.Fragment;
 import android.text.Html;
 import android.text.format.DateUtils;
 import android.view.LayoutInflater;
@@ -19,9 +18,8 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 import java.util.List;
 
 public class TweetsAdapter extends ArrayAdapter<Tweet>{
-
-    protected Fragment fragment;
-    public TweetsAdapter(Fragment fragment, Context context, List<Tweet> objects) {
+    protected TweetsListFragments fragment;
+    public TweetsAdapter(TweetsListFragments fragment, Context context, List<Tweet> objects) {
         super(context, 0, objects);
         this.fragment = fragment;
     }
@@ -61,6 +59,30 @@ public class TweetsAdapter extends ArrayAdapter<Tweet>{
             }
         });
 
+        // Retweet
+        ImageView ivRetweet = (ImageView) tweetView.findViewById(R.id.ivRetweetInline);
+        ivRetweet.setTag(t);
+        if( t.getUser().getUserId() == MyTwitterApp.getPreferences().getCurrentUserId() ){
+            ivRetweet.setEnabled(false);
+            ivRetweet.setImageResource(R.drawable.ic_action_1391606870_retweet);
+        }
+        else if(t.isRetweeted()){
+            ivRetweet.setImageResource(R.drawable.ic_green_retweet);
+        } else {
+            ivRetweet.setOnClickListener( fragment.onClickRetweetListener );
+            ivRetweet.setImageResource(R.drawable.ic_action_1391606870_retweet);
+        }
+
+        // Favorite
+        ImageView ivFavorite = (ImageView) tweetView.findViewById(R.id.ivFavoriteInline);
+        ivFavorite.setTag(t);
+        ivFavorite.setOnClickListener( fragment.onClickFavoriteListener );
+        if(t.isFavorited()){
+            ivFavorite.setImageResource(R.drawable.ic_favorite_on);
+        } else {
+            ivFavorite.setImageResource(R.drawable.ic_favorite_normal);
+        }
+        ;
 
         // Author name
         TextView tvAuthorName = (TextView)tweetView.findViewById(R.id.tvName);

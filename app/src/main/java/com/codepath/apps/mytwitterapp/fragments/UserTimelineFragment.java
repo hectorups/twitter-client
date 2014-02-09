@@ -124,7 +124,7 @@ public class UserTimelineFragment extends TweetsListFragments {
 
         protected User profileUser;
 
-        public UserTimelineTweetsAdapter(User profileUser, Fragment fragment, Context context, List<Tweet> objects) {
+        public UserTimelineTweetsAdapter(User profileUser, TweetsListFragments fragment, Context context, List<Tweet> objects) {
             super(fragment, context, objects);
             this.profileUser = profileUser;
         }

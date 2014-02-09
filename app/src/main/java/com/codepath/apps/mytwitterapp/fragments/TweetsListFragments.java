@@ -12,6 +12,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.codepath.apps.mytwitterapp.ComposeTweetActivity;
 import com.codepath.apps.mytwitterapp.EndlessScrollListener;
@@ -20,8 +21,10 @@ import com.codepath.apps.mytwitterapp.R;
 import com.codepath.apps.mytwitterapp.TweeterDetailActivity;
 import com.codepath.apps.mytwitterapp.TweetsAdapter;
 import com.codepath.apps.mytwitterapp.models.Tweet;
+import com.loopj.android.http.JsonHttpResponseHandler;
 
 import org.json.JSONArray;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 
@@ -239,4 +242,73 @@ public abstract class TweetsListFragments extends Fragment {
     protected abstract void loadTweetsFromApi(int mode);
     protected abstract void loadTweetsFromDb();
 
+    public View.OnClickListener onClickRetweetListener = new View.OnClickListener(){
+        @Override
+        public void onClick(View v) {
+            callbacks.onLoading(true);
+
+            final Tweet tweet = (Tweet) v.getTag();
+
+            MyTwitterApp.getRestClient().reTweet(tweet.getTweetId(), new JsonHttpResponseHandler() {
+                @Override
+                public void onFailure(Throwable error, String details) {
+                    super.onFailure(error, details);
+                    Log.d("DEBUG", "Failed retweet!: " + details);
+                    Toast.makeText(getActivity().getApplicationContext(),
+                            getResources().getString(R.string.retweet_failure)
+                            , Toast.LENGTH_SHORT).show();
+                    callbacks.onLoading(false);
+                }
+
+                @Override
+                public void onSuccess(JSONObject jsonTweet) {
+                    Tweet t = findInTweetList(tweet.getTweetId());
+                    t.setRetweeted(true);
+                    t.setTweetsCount(t.getTweetsCount() + 1);
+                    tweetsAdapter.notifyDataSetChanged();
+                    t.save();
+                    callbacks.onLoading(false);
+                }
+            });
+        }
+    };
+
+    public View.OnClickListener onClickFavoriteListener = new View.OnClickListener(){
+        @Override
+        public void onClick(View v) {
+            callbacks.onLoading(true);
+
+            final Tweet tweet = (Tweet) v.getTag();
+
+            MyTwitterApp.getRestClient().favorite(tweet.getTweetId(), !tweet.isFavorited(), new JsonHttpResponseHandler() {
+                @Override
+                public void onFailure(Throwable error, String details) {
+                    super.onFailure(error, details);
+                    Log.d("DEBUG", "Failed favorite!: " + details);
+                    Toast.makeText(getActivity().getApplicationContext(),
+                            getResources().getString(R.string.favorite_failure)
+                            , Toast.LENGTH_SHORT).show();
+                    callbacks.onLoading(false);
+                }
+
+                @Override
+                public void onSuccess(JSONObject jsonTweet) {
+                    Tweet t = findInTweetList(tweet.getTweetId());
+                    t.setFavorited(!t.isFavorited());
+                    tweetsAdapter.notifyDataSetChanged();
+                    tweet.save();
+                    callbacks.onLoading(false);
+                }
+            });
+        }
+    };
+
+    private Tweet findInTweetList( long tweetId ){
+        for(Tweet tweet: tweetList){
+            if( tweet.getTweetId() == tweetId ){
+                return tweet;
+            }
+        }
+        return null;
+    }
 }

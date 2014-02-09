@@ -60,12 +60,48 @@
             android:layout_height="wrap_content"
             android:autoLink="all"/>
 
-        <ImageView
+        <LinearLayout
             android:layout_marginTop="6dp"
-            android:id="@+id/ivReplyTweet"
-            android:layout_width="20dp"
-            android:layout_height="20dp"
-            android:src="@drawable/ic_reply"/>
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <FrameLayout
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content">
+                <ImageView
+                    android:id="@+id/ivReplyTweet"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:src="@drawable/ic_reply"/>
+            </FrameLayout>
+
+            <FrameLayout
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content">
+                <ImageView
+                    android:id="@+id/ivRetweetInline"
+                    android:layout_width="23dp"
+                    android:layout_height="23dp"
+                    android:src="@drawable/ic_action_1391606870_retweet"/>
+            </FrameLayout>
+
+            <FrameLayout
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content">
+                <ImageView
+                    android:id="@+id/ivFavoriteInline"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:src="@drawable/ic_favorite_normal"/>
+            </FrameLayout>
+
+
+        </LinearLayout>
+
+
 
     </LinearLayout>
 
