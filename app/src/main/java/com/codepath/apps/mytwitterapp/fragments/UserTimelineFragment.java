@@ -74,8 +74,11 @@ public class UserTimelineFragment extends TweetsListFragments {
 
     @Override
     protected void loadTweetsFromDb(){
-//        updateAdaptor(Tweet.recentTweets(TWEETS_PER_LOAD), UPDATE_MODE);
-//        pullToRefreshLayout.setRefreshComplete();
+        long userId = user != null ? user.getUserId() : MyTwitterApp.getPreferences().getCurrentUserId();
+        User searchUser = User.findById(userId);
+        if(searchUser == null) return;
+        updateAdapter(Tweet.recentUserTweets(searchUser.getUserId(), TWEETS_PER_LOAD), UPDATE_MODE);
+        pullToRefreshLayout.setRefreshComplete();
     }
 
     @Override

@@ -166,6 +166,11 @@ public class Tweet extends Model implements Parcelable {
         return new ArrayList<Tweet>(tweetList);
     }
 
+    public static ArrayList<Tweet> recentUserTweets(long userId, int limit) {
+        List<Tweet> tweetList = new Select().from(Tweet.class).where("user = ?", userId).orderBy("tweet_id DESC").limit(limit).execute();
+        return new ArrayList<Tweet>(tweetList);
+    }
+
     public static ArrayList<Tweet> recentTweetsWithMentions(int limit) {
         List<Tweet> tweetList = new Select().from(Tweet.class).where("my_mention = ?", 1).orderBy("tweet_id DESC").limit(limit).execute();
         return new ArrayList<Tweet>(tweetList);
