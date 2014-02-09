@@ -27,7 +27,7 @@ public class TimeLineActivity extends ActionBarActivity
     CollectionPagerAdapter collectionPagerAdapter;
     ViewPager viewPager;
 
-
+    private int processesLoading = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -155,7 +155,13 @@ public class TimeLineActivity extends ActionBarActivity
 
     @Override
     public void onLoading(boolean loading){
-        setProgressBarIndeterminateVisibility(loading);
+        processesLoading += loading ? 1 : -1;
+        if( processesLoading < 1 ){
+            processesLoading = 0;
+            setProgressBarIndeterminateVisibility(false);
+        } else {
+            setProgressBarIndeterminateVisibility(true);
+        }
     }
 
 
