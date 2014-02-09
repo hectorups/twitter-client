@@ -8,7 +8,7 @@
     <string name="login_label">Log in</string>
     <string name="title_activity_time_line">TimeLineActivity</string>
     <string name="profile_image_description">description</string>
-    <string name="title_activity_activity_compose_tweet">ActivityComposeTweet</string>
+    <string name="title_activity_activity_compose_tweet"></string>
     <string name="compose_tweet">Write a Tweet</string>
     <string name="clear_compose_tweet">Clear</string>
     <string name="send_tweet">Send</string>
@@ -20,8 +20,8 @@
     <string name="refresh">Refresh</string>
     <string name="logout">Log out</string>
     <string name="tweet_prompt">What is happening ?</string>
-    <string name="title_activity_profile">ProfileActivity</string>
-    <string name="title_activity_tweeter_detail">TweeterDetailActivity</string>
+    <string name="title_activity_profile">Profile</string>
+    <string name="title_activity_tweeter_detail">Tweet</string>
     <string name="retweet_success">Retweeted</string>
     <string name="retweet_failure">Retweet failed</string>
     <string name="favorite_failure">Favorite Failure</string>
@@ -36,5 +36,6 @@
     <string name="retweet_dialog_cancel">Cancel</string>
     <string name="retweet_dialog_quote">Quote</string>
     <string name="retweet_dialog_retweet">Retweet</string>
+
 
 </resources>
