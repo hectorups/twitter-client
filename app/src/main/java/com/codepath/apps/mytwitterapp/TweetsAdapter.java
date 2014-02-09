@@ -65,9 +65,11 @@ public class TweetsAdapter extends ArrayAdapter<Tweet>{
         if( t.getUser().getUserId() == MyTwitterApp.getPreferences().getCurrentUserId() ){
             ivRetweet.setEnabled(false);
             ivRetweet.setImageResource(R.drawable.ic_action_1391606870_retweet);
+            ivRetweet.setOnClickListener( null );
         }
         else if(t.isRetweeted()){
             ivRetweet.setImageResource(R.drawable.ic_green_retweet);
+            ivRetweet.setOnClickListener( null );
         } else {
             ivRetweet.setOnClickListener( fragment.onClickRetweetListener );
             ivRetweet.setImageResource(R.drawable.ic_action_1391606870_retweet);
