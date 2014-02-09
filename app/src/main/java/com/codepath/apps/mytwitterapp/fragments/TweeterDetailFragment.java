@@ -2,9 +2,11 @@ package com.codepath.apps.mytwitterapp.fragments;
 
 import android.animation.Animator;
 import android.animation.AnimatorInflater;
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.text.Html;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -32,6 +34,8 @@ import java.text.SimpleDateFormat;
  */
 public class TweeterDetailFragment extends Fragment {
     private static final String TWEET_EXTRA = "tweet_extra";
+
+
 
     private Tweet tweet;
 
@@ -140,7 +144,7 @@ public class TweeterDetailFragment extends Fragment {
             ivRetweet.setOnClickListener(new View.OnClickListener(){
                 @Override
                 public void onClick(View v) {
-                    reTweet();
+                    showRetweet();
                 }
             });
         }
@@ -223,6 +227,13 @@ public class TweeterDetailFragment extends Fragment {
         });
     }
 
+    private void showRetweet() {
+        FragmentManager fm = getChildFragmentManager();
+        RetweetDialogFragment retweetDialogFragment = RetweetDialogFragment.newInstance(tweet);
+        retweetDialogFragment.setTargetFragment(this, RetweetDialogFragment.RETWEET_CODE);
+        retweetDialogFragment.show(fm, "fragment_edit_name");
+    }
+
     private void setFavoriteIcon(){
         int drawable;
         if(tweet.isFavorited()){
@@ -243,5 +254,11 @@ public class TweeterDetailFragment extends Fragment {
         Animator anim = AnimatorInflater.loadAnimator(getActivity(), R.animator.enlarge);
         anim.setTarget(ivFavorite);
         anim.start();
+    }
+
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (resultCode == Activity.RESULT_OK && requestCode == RetweetDialogFragment.RETWEET_CODE){
+            reTweet();
+        }
     }
 }

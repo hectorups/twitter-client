@@ -26,10 +26,11 @@ public class ComposeTweetActivity extends ActionBarActivity {
     public static final String CREATED_TWEET = "com.codepath.apps.mytwitterapp.activitycomposetweet.created_tweet";
 
     public static final String REPLY_TWEET = "reply_tweet";
+    public static final String QUOTE = "quote";
     private Tweet replyTweet;
+    private boolean isQuote;
 
     private final int CHARACTER_LIMIT = 140;
-    private final String TWEET = "tweet";
 
     private EditText etTweetContents;
     private TextView tvCharacterCount;
@@ -46,6 +47,7 @@ public class ComposeTweetActivity extends ActionBarActivity {
         supportRequestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
 
         replyTweet = getIntent().getParcelableExtra(REPLY_TWEET);
+        isQuote = getIntent().getBooleanExtra(QUOTE, false);
 
         setContentView(R.layout.activity_compose_tweet);
 
@@ -88,7 +90,13 @@ public class ComposeTweetActivity extends ActionBarActivity {
         etTweetContents.addTextChangedListener(mTextEditorWatcher);
 
         if(replyTweet != null){
-            etTweetContents.setText("@" + replyTweet.getUser().getName() + " ");
+
+            if(isQuote){
+                etTweetContents.setText("\"" + replyTweet.getBody() + "\"");
+            } else {
+                etTweetContents.setText("@" + replyTweet.getUser().getName() + " ");
+            }
+
             etTweetContents.setSelection(etTweetContents.getText().length());
         }
 

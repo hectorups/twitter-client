@@ -31,4 +31,10 @@
     <string name="retweets_count">RETWEETS</string>
     <string name="favorites_count">FAVORITES</string>
 
+    <string name="retweet_dialog_title">Retweet</string>
+    <string name="retweet_dialog_prompt">Retweet this to your followers?</string>
+    <string name="retweet_dialog_cancel">Cancel</string>
+    <string name="retweet_dialog_quote">Quote</string>
+    <string name="retweet_dialog_retweet">Retweet</string>
+
 </resources>
