@@ -21,6 +21,8 @@ dependencies {
     compile 'com.android.support:appcompat-v7:+'
     compile 'com.github.chrisbanes.actionbarpulltorefresh:extra-abc:+'
     compile 'com.netflix.rxjava:rxjava-android:0.15.1'
+    compile 'com.nineoldandroids:library:2.4.0'
+
     compile files('libs/activeandroid-3.1.jar')
     compile files('libs/android-async-http-1.4.3.jar')
     compile files('libs/codepath-oauth-0.3.0.jar')

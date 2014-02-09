@@ -1,5 +1,7 @@
 package com.codepath.apps.mytwitterapp.fragments;
 
+import android.animation.Animator;
+import android.animation.AnimatorInflater;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -213,6 +215,9 @@ public class TweeterDetailFragment extends Fragment {
                 tweetDetailsCallbacks.tweetUpdated(tweet);
                 setFavoriteIcon();
                 updateCounters();
+
+                animateIv(ivFavorite);
+
                 getActivity().setProgressBarIndeterminateVisibility(false);
             }
         });
@@ -232,5 +237,11 @@ public class TweeterDetailFragment extends Fragment {
 
     public static interface TweetDetailsCallbacks {
         public void tweetUpdated(Tweet tweet);
+    }
+
+    private void animateIv(ImageView iv){
+        Animator anim = AnimatorInflater.loadAnimator(getActivity(), R.animator.enlarge);
+        anim.setTarget(ivFavorite);
+        anim.start();
     }
 }
