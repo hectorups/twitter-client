@@ -1,10 +1,7 @@
 package com.codepath.apps.mytwitterapp.fragments;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -174,20 +171,11 @@ public abstract class TweetsListFragments extends Fragment {
         return 0;
     }
 
-    public boolean isOnline() {
 
-        ConnectivityManager cm =
-                (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo netInfo = cm.getActiveNetworkInfo();
-        if (netInfo != null && netInfo.isConnectedOrConnecting()) {
-            return true;
-        }
-        return false;
-    }
 
     private void loadTweets(int mode){
         if(callbacks != null) callbacks.onLoading(true);
-        if( isOnline() ){
+        if( MyTwitterApp.isOnline() ){
             loadTweetsFromApi(mode);
         } else {
             loadTweetsFromDb();

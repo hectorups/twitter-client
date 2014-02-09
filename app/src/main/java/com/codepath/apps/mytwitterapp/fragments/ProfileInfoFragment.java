@@ -71,34 +71,38 @@ public class ProfileInfoFragment extends Fragment {
     }
 
     protected void loadProfileInfo(){
-        if(user != null){
-            loadOtherProfileInfo();
+        if(user == null){
+            user = User.findById(MyTwitterApp.getPreferences().getCurrentUserId());
+        }
+
+        // If the user is online check for fullprofile in the API
+        // otherwise populate with whatever we currently have
+        if( MyTwitterApp.isOnline() ){
+            loadProfileInfoFromApi();
         } else {
-            loadMyProfileInfo();
+            populateProfileView(user);
         }
     }
 
-    protected void loadOtherProfileInfo(){
+    protected void loadProfileInfoFromApi(){
         MyTwitterApp.getRestClient().getAccountInformation(user.getUserId(), user.getScreenName(), new JsonHttpResponseHandler() {
             @Override
             public void onSuccess(JSONObject json) {
                 User u = User.fromJson(json);
-                //getActivity().getActionBar().setTitle("@" + u.getName());
                 populateProfileView(u);
             }
         });
     }
 
-    protected void loadMyProfileInfo(){
-        MyTwitterApp.getRestClient().getMyInfo(new JsonHttpResponseHandler(){
-            @Override
-            public void onSuccess(JSONObject json){
-                User u = User.fromJson(json);
-                //getActivity().getActionBar().setTitle("@" + u.getName());
-                populateProfileView(u);
-            }
-        });
-    }
+//    protected void loadMyProfileInfo(){
+//        MyTwitterApp.getRestClient().getMyInfo(new JsonHttpResponseHandler(){
+//            @Override
+//            public void onSuccess(JSONObject json){
+//                User u = User.fromJson(json);
+//                populateProfileView(u);
+//            }
+//        });
+//    }
 
     private void populateProfileView(User u){
 
