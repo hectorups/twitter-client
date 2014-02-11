@@ -45,8 +45,8 @@ public class UserTimelineFragment extends TweetsListFragments {
     }
 
     @Override
-    public void setupUI(LayoutInflater inflater, View v){
-        super.setupUI(inflater, v);
+    public void setupHeader(LayoutInflater inflater){
+        super.setupHeader(inflater);
 
         View header = inflater.inflate(R.layout.profile_header_item, null);
 

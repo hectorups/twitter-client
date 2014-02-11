@@ -99,6 +99,9 @@ public abstract class TweetsListFragments extends Fragment {
 
     public void setupUI(LayoutInflater inflater, View v){
         lvTweets = (ListView) v.findViewById(R.id.lvTweet);
+
+        setupHeader(inflater);
+
         tweetsAdapter = getAdapter();
         lvTweets.setAdapter(tweetsAdapter);
         lvTweets.setOnScrollListener(endlessScrollListener);
@@ -112,6 +115,10 @@ public abstract class TweetsListFragments extends Fragment {
 
     public TweetsAdapter getAdapter(){
         return new TweetsAdapter(this, getActivity(), tweetList);
+    }
+
+    public void setupHeader(LayoutInflater inflater){
+        return;
     }
 
     @Override
