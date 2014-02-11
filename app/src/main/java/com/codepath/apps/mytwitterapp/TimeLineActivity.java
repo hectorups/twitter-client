@@ -76,6 +76,7 @@ public class TimeLineActivity extends ActionBarActivity
             case R.id.action_write_tweet:
                 i = new Intent(getApplicationContext(), ComposeTweetActivity.class);
                 startActivityForResult(i, TweetsListFragments.REQUEST_CODE);
+                overridePendingTransition(R.animator.slide_in_up, R.animator.slide_out_up);
                 return true;
             case R.id.action_logout:
                 MyTwitterApp.getRestClient().clearAccessToken();
